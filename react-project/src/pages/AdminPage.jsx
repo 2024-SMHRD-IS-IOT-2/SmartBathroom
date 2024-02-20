@@ -2,16 +2,21 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom'; // 페이지 이동을 위해 useNavigate 훅 사용
 import './App.css';
 
-
-
 const AdminPage = () => {
   const navigate = useNavigate(); // 페이지 이동을 위한 네비게이트 함수
 
   // 예제를 위한 하드코딩된 사용자 데이터
   const users = [
-    { id: 1, name: '사용자 1', email: 'user1@example.com' },
-    { id: 2, name: '사용자 2', email: 'user2@example.com' },
-    // 추가 사용자 데이터...
+    { id: 1, name: '유저 1', email: 'user1@example.com' },
+    { id: 2, name: '유저 2', email: 'user2@example.com' },
+    { id: 3, name: '유저 3', email: 'user3@example.com' },
+    { id: 4, name: '유저 4', email: 'user4@example.com' },
+    { id: 5, name: '유저 5', email: 'user5@example.com' },
+    { id: 6, name: '유저 6', email: 'user6@example.com' },
+    { id: 7, name: '유저 7', email: 'user7@example.com' },
+    { id: 8, name: '유저 8', email: 'user8@example.com' },
+    { id: 9, name: '유저 9', email: 'user9@example.com' },
+    { id: 10, name: '유저 10', email: 'user10@example.com' }
   ];
 
   // 정보 변경 페이지로 이동하며, 사용자 ID를 파라미터로 전달

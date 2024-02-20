@@ -1,5 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom'; // 페이지 이동을 위해 useNavigate 훅 사용
+import './App.css';
+
+
 
 const AdminPage = () => {
   const navigate = useNavigate(); // 페이지 이동을 위한 네비게이트 함수

@@ -1,14 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import HomePage from './pages/HomePage'; // 홈 페이지 컴포넌트 임포트
+import LoginPage from './pages/LoginPage'; // 로그인 페이지 컴포넌트 임포트
+import JoinPage from './pages/JoinPage'; // 회원가입 페이지 컴포넌트 임포트
+import UserPage from './pages/UserPage'; // 사용자 페이지 컴포넌트 임포트
+import AdminPage from './pages/AdminPage'; // 관리자 페이지 컴포넌트 임포트
+import ChartPage from './pages/ChartPage'; // 차트 페이지 컴포넌트 임포트
+import ChangeUiPage from './pages/ChangeUiPage'; // 정보 변경 페이지 컴포넌트 임포트
 
 function App() {
   return (
-    <div>
-      <h1>핵심프로젝트-스마트화장실</h1>
-      <h2>추가</h2>
-
-    </div>
+      <Routes>
+        <Route path="/" element={<HomePage />} /> // 홈 페이지 경로
+        <Route path="/login" element={<LoginPage />} /> // 로그인 페이지 경로
+        <Route path="/join" element={<JoinPage />} /> // 회원가입 페이지 경로
+        <Route path="/user" element={<UserPage />} /> // 사용자 페이지 경로
+        <Route path="/admin" element={<AdminPage />} /> // 관리자 페이지 경로
+        <Route path="/chart" element={<ChartPage />} /> // 차트 페이지 경로
+        <Route path="/changeui" element={<ChangeUiPage />} /> // 정보 변경 페이지 경로
+      </Routes>
   );
 }
 
-export default App;
+export default App; // App 컴포넌트를 내보냅니다.

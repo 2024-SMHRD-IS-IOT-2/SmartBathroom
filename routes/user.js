@@ -8,9 +8,8 @@ const router = express.Router();
 
 // 로그인 라우터
     // DB 연동 코드 추가
-
-// 로그인 성공
-// 로그인 실패
+    // 로그인 성공
+    // 로그인 실패
 
 // 로그아웃 라우터
 
@@ -19,6 +18,13 @@ const router = express.Router();
 
 // 회원 탈퇴 라우터
     // DB 연동 코드 추가
+
+// 차트 데이터 조회 라우터
+    // DB 연동 코드 추가
+// 차트 UI페이지 차트 유형 
+    // 유형 ,저장 및 공유 
+    // DB 연동 코드 추가
+
 
 
 router.post('/select', (req, res) => {

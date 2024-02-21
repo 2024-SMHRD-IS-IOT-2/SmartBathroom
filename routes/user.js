@@ -155,7 +155,7 @@ router.post("/handleSignIn", (req, res) => {
 
   const sql = `select member_id from members where
                       member_id =? and member_pw=?`;
-  conn.query(sql, [tempId, tempPw], (err, rows) => {
+  conn.query(sql, [userId, userPw], (err, rows) => {
     // console.log("err", err);
     // console.log("rows", rows);
     if (rows.length > 0) {
@@ -178,7 +178,7 @@ router.post("/handleSignIn", (req, res) => {
 //로그아웃 기능
 router.get("/signOut", (req, res) => {
   req.session.destroy();
-  res.redirect("/"); //세션 다 삭제되었으므로 redirect 명령어가 잘 작동됨
+  res.redirect("/home"); //세션 다 삭제되었으므로 redirect 명령어가 잘 작동됨
 });
 
 //회원목록 기능

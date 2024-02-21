@@ -17,13 +17,29 @@ const LoginPage = () => {
     } else {
       try {
         // 로그인 요청을 보냅니다.
-        await axios.post('/user/login', { userId, userPw });
-        // 로그인에 성공했을 때
-        alert('로그인에 성공했습니다.');
-        navigate('/user'); // 유저 페이지로 이동
+        await axios.post('/user/handleLogin', { userId, userPw })
+        .then((res)=>{
+            if (res.data.result === "success"){
+              // 로그인에 성공했을 때
+              alert('회원 로그인에 성공했습니다.');
+              navigate('/user'); // 유저 페이지로 이동
+
+            } else if (res.data.result === "success") {
+              alert('관리자 로그인에 성공했습니다.');
+              navigate('/admin'); // 유저 페이지로 이동
+            }
+            else {
+              // 로그인 실패
+              alert("로그인에 실패했습니다. 다시 시도해주세요");
+            }
+          }
+        );
+
       } catch (error) {
+        console.log("error", error);
         // 일반적인 오류 메시지를 표시합니다.
         alert('로그인에 실패했습니다. 다시 시도해주세요.');
+        
       }
     }
   };
@@ -54,7 +70,7 @@ const LoginPage = () => {
         <button type="submit">로그인</button>
       </form>
       <button onClick={() => navigate('/join')}>회원가입</button> {/* 회원가입 페이지로 이동 */}
-      <button onClick={() => navigate('/')}>홈으로</button> {/* 홈 페이지로 이동 */}
+      <button onClick={() => navigate('/home')}>홈으로</button> {/* 홈 페이지로 이동 */}
     </div>
   );
 };

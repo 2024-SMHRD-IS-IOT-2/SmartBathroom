@@ -26,6 +26,10 @@ const router = express.Router();
     // DB 연동 코드 추가
 
 
+router.post('/join',(req,res)=>{
+    console.log(req.body);
+    res.json({msg:'success'})
+})
 
 router.post('/select', (req, res) => {
 // 회원 정보 리스트

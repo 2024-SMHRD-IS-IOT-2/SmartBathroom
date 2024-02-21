@@ -9,40 +9,41 @@ const conn = require("../config/database");
     // DB 연동 코드 추가
 
 //회원가입 기능
-router.post("/handleSignUp", (req, res) => {
+router.post("/handleJoin", (req, res) => {
     console.log("signup data : ", req.body);
-    const { member_id, member_pw, menber_name,member_phone,
-          member_birthdate, member_addr, member_height,member_weight,
-          guardian_name, guardian_phone, sleep_time,sleep_lightening,
-          joined_at
-              } = req.body;
+    const { userId, userPw, userName,userNumber,
+      birthDate, addr, height,weight,
+      guardianName, guardianNumber,} = req.body;
+
+    //default 값
+    const sleep_time = "23:00_06:00";
+    const sleep_lightening = 50;
   
     //회원 중복 검사
     const sql = `select member_id from members where member_id=?`;
-    conn.query(sql, member_id, (err, rows) => {
+    conn.query(sql, [userId], (err, rows) => {
+      // 회원 아이디가 이미 존재할 경우 dup 반환
       if (rows.length > 0) {
-        res.send(`<script>
-          alert('이미 사용중인 아이디입니다');
-          location.href='/signup';
-          </script>`);
+        res.json({result:'dup'});
       } else {
-        const sql = `insert into members values 
-                  (?,?,?,?,?,?,?,?,?,?,?,?,?)`;
-        conn.query(sql, [member_id, member_pw, menber_name,member_phone,
-          member_birthdate, member_addr, member_height,member_weight,
-          guardian_name, guardian_phone, sleep_time,sleep_lightening,
-          joined_at], (err, rows) => {
-          //  console.log("rows", rows);
-          //  console.log("error", err);
+        // 쿼리
+        const sql = `insert into members (
+        member_id,member_pw,member_name,member_phone,member_birthdate,
+        member_addr, member_height, member_weight, guardian_name,
+        guardian_phone, sleep_time, sleep_lightening)
+
+        values (?,?,?,?,?,?,?,?,?,?,?,?)`;
+        conn.query(sql, [ userId, userPw, userName,userNumber,
+          birthDate, addr, height,weight,
+          guardianName, guardianNumber, sleep_time,sleep_lightening], 
+          (err, rows) => {
+
           if (rows) {
             console.log("회원가입 성공");
-            res.redirect("/");
+            res.json({result:"success"});
           } else {
-            console.log("회원가입 실패");
-            res.send(`<script>alert("회원가입 실패"); 
-              location.href='/signup';
-              </script>`);
-            //alert는 브라우저 내에 내장된 기능인데 node.js는 브라우저 밖에서 작업하는 것이므로 alert를 실행하기 위해 script 태그를 보내주는 것
+            console.log("회원가입 실패", err);
+            res.json({result:'fail'});
           }
         });
       }

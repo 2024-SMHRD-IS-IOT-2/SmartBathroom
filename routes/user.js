@@ -56,29 +56,29 @@ router.post("/handleJoin", (req, res) => {
     // 로그인 성공
     // 로그인 실패
 
-    router.post("/handleSignIn", (req, res) => {
-        console.log("signin data", req.body);
-        const { member_id, member_pw } = req.body;
-        const sql = `select member_id from members where
-                      member_id =? and member_pw=?`;
-        conn.query(sql, [member_id, member_pw], (err, rows) => {
-          // console.log("err", err);
-          // console.log("rows", rows);
-          if (rows.length > 0) {
-            console.log("로그인 성공");
-            // res.redirect("/"); //서버 단에서 작동하는 것 세션 작업 후에는 잘 작동 안 되므로 클라이언트 측에서 작동하는 JS형태의 location.href 명령어 써 주자
-            res.send(`<script>location.href='/'</script>`);
-            
-          } else {
-            console.log("로그인 실패");
-            res.send(`<script>
-                  alert('로그인 실패');
-                  location.href = '/signin';
-                  </script>
-                  `);
-          }
-        });
-      });
+router.post("/handleSignIn", (req, res) => {
+    console.log("signin data", req.body);
+    const { member_id, member_pw } = req.body;
+    const sql = `select member_id from members where
+                  member_id =? and member_pw=?`;
+    conn.query(sql, [member_id, member_pw], (err, rows) => {
+      // console.log("err", err);
+      // console.log("rows", rows);
+      if (rows.length > 0) {
+        console.log("로그인 성공");
+        // res.redirect("/"); //서버 단에서 작동하는 것 세션 작업 후에는 잘 작동 안 되므로 클라이언트 측에서 작동하는 JS형태의 location.href 명령어 써 주자
+        res.send(`<script>location.href='/'</script>`);
+        
+      } else {
+        console.log("로그인 실패");
+        res.send(`<script>
+              alert('로그인 실패');
+              location.href = '/signin';
+              </script>
+              `);
+      }
+    });
+  });
 
 // 로그아웃 라우터
 

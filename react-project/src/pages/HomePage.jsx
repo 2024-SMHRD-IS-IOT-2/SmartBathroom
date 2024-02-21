@@ -13,6 +13,10 @@ function HomePage() {
   return (
     <div>
       <h1>홈페이지</h1>
+      <p>제품 정보</p>
+      {/* 이미지 */}
+      {/* 제품 소개 */}
+      
       <button onClick={goToLoginPage}>로그인</button> {/* 버튼 클릭 시 로그인 페이지로 이동 */}
     </div>
   );

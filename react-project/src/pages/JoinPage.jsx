@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../axios';
-import './JoinPage.css';
+import '../App.css';
 
 const JoinPage = () => {
   const navigate = useNavigate();
@@ -26,7 +26,6 @@ const JoinPage = () => {
     const inputs = {
       userId: userIdRef.current.value.trim(),
       userPw: userPwRef.current.value.trim(),
-      userPw2: userPw2Ref.current.value.trim(),
       userName: userNameRef.current.value.trim(),
       userNumber: userNumberRef.current.value.trim(),
       birthDate: birthDateRef.current.value.trim(),
@@ -52,8 +51,31 @@ const JoinPage = () => {
     const userData = {...inputs};
 
     try {
-      await axios.post('/user/join', userData); // 회원가입 요청 주소 수정
-      navigate('/login'); // 성공 시 로그인 페이지로 이동
+      // 회원가입 요청 주소 수정
+      await axios.post('/user/handleJoin', userData)
+      .then((res)=>{
+        
+        switch (res.data.result) {
+          case 'dup': // 회원 아이디 중복
+            alert("중복된 아이디입니다.");
+            break;
+          case 'success': // 회원가입 성공.  로그인 페이지로 이동
+            alert("회원가입되셨습니다. 로그인해주세요");
+            navigate('/login'); 
+            break;
+          case 'fail': // 회원가입 실패 (데이터베이스 insert 오류)
+            alert("회원가입에 실패했습니다. 다시 입력해주세요");
+            navigate('/join'); 
+            break;
+        
+          default:
+            break;
+        }
+
+
+      });
+;
+      
     } catch (error) {
       console.error('Error:', error);
       alert('회원가입에 실패했습니다.');

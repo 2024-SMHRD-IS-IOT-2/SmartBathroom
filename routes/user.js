@@ -1,17 +1,15 @@
-
-
 const express = require("express");
 const router = express.Router();
 const conn = require("../config/database");
 
-
-// 회원가입 시, ID 중복체크
-// DB연동 추가
-
+//default 값 : DB에 등록해서 주석처리
+// const sleep_time = "23:00_06:00";
+// const sleep_lightening = 50;
 
 // 회원가입 라우터
-router.post('/handleJoin', (req, res) => {
-  console.log('user.js 회원가입 요청...', req.body);
+
+router.post("/handleJoin", (req, res) => {
+  console.log("회원가입 요청...", req.body);
   const {
     userId,
     userPw,
@@ -22,24 +20,21 @@ router.post('/handleJoin', (req, res) => {
     height,
     weight,
     guardianName,
-    guardianNumber
+    guardianNumber,
   } = req.body;
-  let birthDate2 = birthDate.replace(/\//g, '-');
+  let birthDate2 = birthDate.replace(/\//g, "-");
   const sql = `select member_id from members where member_id=?`;
   conn.query(sql, [userId], (err, rows) => {
     if (rows.length > 0) {
       //중복 : dup , 고유값 : uniq
-      //현재는 db에 연결되어 있지 않으므로 id 중복체크를
-      //실질적으로 하지 않고 임의의 값을 넣어서 작동하게
-      //만든 것
-      res.json({ result: 'dup' });
-      console.log('user.js 같은 아이디가 이미 존재합니다');
+      res.json({ result: "dup" });
+      console.log("같은 아이디가 이미 존재합니다");
     } else {
       const sql = `insert into members(
-          member_id,member_pw,member_name,member_phone,member_birthdate,
-          member_addr, member_height, member_weight, guardian_name,
-          guardian_phone, sleep_time, sleep_lightening) values 
-        (?,?,?,?,?,?,?,?,?,?,?,?)`;
+        member_id,member_pw,member_name,member_phone,member_birthdate,
+        member_addr, member_height, member_weight, guardian_name,
+        guardian_phone) values 
+      (?,?,?,?,?,?,?,?,?,?)`;
       conn.query(
         sql,
         [
@@ -53,46 +48,49 @@ router.post('/handleJoin', (req, res) => {
           weight,
           guardianName,
           guardianNumber,
-          sleep_time,
-          sleep_lightening
         ],
         (err, rows) => {
           if (rows) {
             console.log("user.js 회원가입 성공");
-            res.json({ result: 'success' });
+            res.json({ result: "success" });
           } else {
             console.log("user.js 회원가입 실패", err);
-            res.json({ result: 'fail' });
+            res.json({ result: "fail" });
           }
-        });
+        }
+      );
     }
   });
 });
 
 // 로그인 라우터
 router.post("/handleLogin", (req, res) => {
-  console.log("로그인 요청", req.body);
+  console.log("user.js 로그인 요청", req.body);
   const { userId, userPw } = req.body;
 
   const sql = `select * from members where
                       member_id =? and member_pw=?`;
   conn.query(sql, [userId, userPw], (err, rows) => {
-
-    // members 테이블에 로그인 정보가 있을 시
+    // console.log("err", err);
+    // console.log("rows", rows);
     if (rows.length > 0) {
-      console.log("user.js 로그인 성공", rows[0]);
-
+      // members 테이블에 로그인 정보가 있을 경우
+      console.log("user.js 로그인 성공",rows[0]);
+      
       // session 에 저장.
       req.session.loginInfo = rows[0];
-      
-      if (userId === 'admin') {
-        console.log('admin입니다');
-        res.json({ result: "admin"});
+
+      // 관리자 로그인
+      if (userId === "admin") {
+        console.log("admin입니다");
+        res.json({ result: "admin" });
       } else {
-        console.log('회원입니다');
-        res.json({ result: "success"});
+        // 회원 로그인
+        console.log("회원입니다");
+        res.json({ result: "success" });
       }
     } else {
+      // 로그인 실패
       console.log("로그인 실패");
       res.json({ result: "fail" });
     }
@@ -106,14 +104,123 @@ router.get('/getSession', (req, res)=>{
 })
 
 
+//유저 페이지
 
-// 로그아웃 라우터
+router.post("/userPage", (req, res) => {
+  console.log("유저 페이지 정보", req.body);
+  const { userId, userPw } = req.body;
 
+  const sql = `select member_id from members where
+                      member_id =? and member_pw=?`;
+  conn.query(sql, [userId, userPw], (err, rows) => {
+    // console.log("err", err);
+    // console.log("rows", rows);
+    if (rows.length > 0) {
+      // 로그인 성공
+      console.log("user.js 로그인 성공");
+      // 관리자 로그인
+      if (userId === "admin") {
+        console.log("user.js admin입니다");
+        res.json({ result: "admin" });
+      } else {
+        // 회원 로그인
+        console.log("user.js 회원입니다");
+        res.json({ result: "success" });
+      }
+    } else {
+      // 로그인 실패
+      console.log("user.js 로그인 실패");
+      res.json({ result: "fail" });
+    }
+  });
+});
 
-//로그아웃 기능
-router.get("/signOut", (req, res) => {
-  req.session.destroy();
-  res.redirect("/home"); //세션 다 삭제되었으므로 redirect 명령어가 잘 작동됨
+// 개인정보 수정(ChangeUi)
+router.post("/handleModify", (req, res) => {
+  console.log("Modify Member Info", req.body);
+  const {
+    userPw,
+    userNumber,
+    addr,
+    height,
+    weight,
+    guardianName,
+    guardianNumber,
+    userId,
+  } = req.body;
+  //일반 회원
+  if (userId !== "admin") {
+    const sql = `UPDATE members
+                 SET member_pw = ?, member_phone = ?, member_addr = ?,
+                     member_height = ?, member_weight = ?, guardian_name = ?, 
+                     guardian_phone = ?
+                 WHERE member_id = ? and member_pw= ?`;
+    conn.query(
+      sql,
+      [
+        userPw,
+        userNumber,
+        addr,
+        height,
+        weight,
+        guardianName,
+        guardianNumber,
+        userId,
+        userPw,
+      ],
+      (err, result) => {
+        console.log(result);
+        if (result.changedRows > 0) {
+          res.json({ result: "success" });
+          console.log("user.js 회원정보 수정 완료 일반회원");
+        } else {
+          console.log("err:", err);
+          res.json({ result: "fail" });
+          console.log("user.js 회원정보 수정 실패 일반회원");
+        }
+      }
+    );
+    //관리자
+  } else {
+    const sql = `UPDATE members
+                 SET member_pw = ?, member_phone = ?, member_addr = ?,
+                     member_height = ?, member_weight = ?, guardian_name = ?, 
+                     guardian_phone = ?`;
+    conn.query(
+      sql,
+      [userPw, userNumber, addr, height, weight, guardianName, guardianNumber],
+      (err, result) => {
+        console.log(result);
+        if (result.changedRows > 0) {
+          res.json({ result: "success" });
+          console.log("user.js 회원정보 수정 완료 관리자");
+        } else {
+          console.log("err:", err);
+          res.json({ result: "fail" });
+          console.log("user.js 회원정보 수정 실패 관리자");
+        }
+      }
+    );
+  }
+});
+
+//관리자 페이지 : 열람기능
+router.post("/adminPage", (req, res) => {
+  console.log("Admin Page", req.body);
+  const sql = `Select *
+                 from members`;
+  conn.query(sql, (err, rows) => {
+    console.log(rows);
+    if (rows.length = 0) {
+      console.log(rows);
+      res.json({ rows: rows, result: "success" });
+      console.log("user.js 관리자가 열람할 회원정보 보냈습니다");
+    } else {
+      console.log("err:", err);
+      res.json({ result: "fail" });
+      console.log("user.js 오류발생");
+    }
+  });
 });
 
 
@@ -147,25 +254,36 @@ router.get('/sensorCommand', (req, res) => {
 
 
 
-//회원목록 기능
-router.get("/showList", (req, res) => {
-  console.log("showList data", req.query);
-  if (req.query.userId !== "admin") {
+
+//////////////////이 이하는 작업중 내지 더미////////////
+
+//로그아웃 기능
+router.get("/signOut", (req, res) => {
+  req.session.destroy();
+  res.redirect("/home"); //세션 다 삭제되었으므로 redirect 명령어가 잘 작동됨
+});
+
+//회원정보 기능
+router.get("/showMember", (req, res) => {
+  console.log("showMember data", req.query);
+  //if (req.query.userId !== "admin") {
+  if (userId !== "admin") {
     //관리자 아닐 경우 = 특정 회원만
     const sql = `select * from members
           where member_id =?`;
-    conn.query(sql, [req.query.userId], (err, rows) => {
+    //conn.query(sql, [req.query.userId], (err, rows) => {
+    conn.query(sql, ["1234"], (err, rows) => {
       console.log("err", err);
       console.log("rows", rows);
-      res.render("list", { rows: rows });
+      res.json({ result: rows });
     });
   } else {
     //관리자 = 전체회원 검색
-    const sql = `select * from members`;
+    const sql = `select * from members where member_id != "admin"`;
     conn.query(sql, (err, rows) => {
       console.log("err", err);
       console.log("rows", rows);
-      res.render("list", { rows: rows });
+      res.json({ result: rows });
     });
   }
 });
@@ -191,7 +309,6 @@ router.post("/handleDelete", (req, res) => {
 });
 
 ///////////일단 이 밑으로는 아직 작업중.....//////
-// user.js (Node.js 서버 라우터 파일)
 
 // 회원정보 수정
 router.post("/modify", (req, res) => {

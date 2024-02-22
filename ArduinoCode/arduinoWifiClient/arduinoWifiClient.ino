@@ -1,4 +1,10 @@
 #include <WiFi.h>
+#include "DHT.h"
+
+// 
+#define DHTPIN 17
+#define DHTTYPE DHT11
+DHT dht(DHTPIN, DHTTYPE);
 
 const char* ssid = "SMHRD_강의실C";
 const char* password = "ccccc33333";
@@ -10,6 +16,7 @@ WiFiClient wifiClient;
 void setup() {
   Serial.begin(115200);
   connectToWiFi();
+
 }
 
 void loop() {
@@ -18,8 +25,10 @@ void loop() {
     int sensorValue1 = 123;
     int sensorValue2 = 333;
 
+
     // Send sensor data to server
     sendDataToServer(sensorValue1, sensorValue2);
+
 
     // Check for commands from server
     receiveCommandsFromServer();
@@ -40,7 +49,8 @@ void connectToWiFi() {
 
 void sendDataToServer(int sensorValue1, int sensorValue2) {
   String url = "/user/sensorData"; // Adjust the endpoint as needed
-  String data = "sensor1=" + String(sensorValue1) + "&sensor2=" + String(sensorValue2);
+  String data = "sensor1=" + String(sensorValue1) + 
+                "&sensor2=" + String(sensorValue2) ;
   sendRequest(url, data);
 }
 

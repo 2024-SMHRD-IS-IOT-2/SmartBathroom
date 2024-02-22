@@ -107,17 +107,11 @@ router.get('/getSession', (req, res)=>{
   res.json(req.session.loginInfo);
 })
 
-
-
 // 로그아웃 라우터
-
-
-//로그아웃 기능
-router.get("/signOut", (req, res) => {
+router.post('/handleLogout', (req, res)=>{
   req.session.destroy();
-  res.redirect("/home"); //세션 다 삭제되었으므로 redirect 명령어가 잘 작동됨
-});
-
+  res.json({result : 'success'})
+})
 
 // 아두이노 데이터 받기 skeleton code
 /*
@@ -125,7 +119,6 @@ router.get("/signOut", (req, res) => {
 
 */
 router.get('/sensorData', (req, res) => {
-
   console.log("receiving data");
   const sensor1Value = req.query.sensor1;
   const sensor2Value = req.query.sensor2;

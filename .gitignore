@@ -1,3 +1,4 @@
 node_modules
 react-project/node_modules
 config/database.js
+sessions

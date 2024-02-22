@@ -39,13 +39,13 @@ void connectToWiFi() {
 }
 
 void sendDataToServer(int sensorValue1, int sensorValue2) {
-  String url = "/sensorData"; // Adjust the endpoint as needed
+  String url = "/user/sensorData"; // Adjust the endpoint as needed
   String data = "sensor1=" + String(sensorValue1) + "&sensor2=" + String(sensorValue2);
   sendRequest(url, data);
 }
 
 void receiveCommandsFromServer() {
-  String url = "/sensorCommand"; // Adjust the endpoint as needed
+  String url = "/user/sensorCommand"; // Adjust the endpoint as needed
   sendRequest(url, "");
 }
 

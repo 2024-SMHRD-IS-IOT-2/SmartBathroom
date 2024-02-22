@@ -8,33 +8,10 @@ const conn = require("../config/database");
 // 회원가입 시, ID 중복체크
 // DB연동 추가
 
-//default 값
-const sleep_time = "23:00_06:00";
-const sleep_lightening = 50;
 
 // 회원가입 라우터
-// DB 연동 코드 추가
-
-// router.post('/checkId',(req,res)=>{
-//   console.log('ID중복체크요청',req.body);
-//   const {userId} = req.body;
-//   const sql = `select member_id from members where member_id=?`;
-//   conn.query(sql, [userId], (err, rows) => {
-//     if (rows.length > 0) {
-//       res.json({result:'dup'});
-//     } else {
-//   //중복 : dup , 고유값 : uniq
-//   //현재는 db에 연결되어 있지 않으므로 id 중복체크를
-//   //실질적으로 하지 않고 임의의 값을 넣어서 작동하게
-//   //만든 것
-//   // res.json({result:'dup'});
-//   res.json({result:'uniq'});}
-// })});
-
-
-// 회원가입 라우터
-router.post('/handleJoin',(req,res)=>{
-  console.log('회원가입 요청...',req.body);
+router.post('/handleJoin', (req, res) => {
+  console.log('user.js 회원가입 요청...', req.body);
   const {
     userId,
     userPw,
@@ -51,120 +28,70 @@ router.post('/handleJoin',(req,res)=>{
   const sql = `select member_id from members where member_id=?`;
   conn.query(sql, [userId], (err, rows) => {
     if (rows.length > 0) {
-  //중복 : dup , 고유값 : uniq
-  //현재는 db에 연결되어 있지 않으므로 id 중복체크를
-  //실질적으로 하지 않고 임의의 값을 넣어서 작동하게
-  //만든 것
-      res.json({result:'dup'});
-      console.log('같은 아이디가 이미 존재합니다');      
+      //중복 : dup , 고유값 : uniq
+      //현재는 db에 연결되어 있지 않으므로 id 중복체크를
+      //실질적으로 하지 않고 임의의 값을 넣어서 작동하게
+      //만든 것
+      res.json({ result: 'dup' });
+      console.log('user.js 같은 아이디가 이미 존재합니다');
     } else {
       const sql = `insert into members(
-        member_id,member_pw,member_name,member_phone,member_birthdate,
-        member_addr, member_height, member_weight, guardian_name,
-        guardian_phone, sleep_time, sleep_lightening) values 
-      (?,?,?,?,?,?,?,?,?,?,?,?)`;
-conn.query(
-sql,
-[
-userId,
-userPw,
-userName,
-userNumber,
-birthDate2,
-addr,
-height,
-weight,
-guardianName,
-guardianNumber,
-sleep_time,
-sleep_lightening
-],
-(err, rows) => {
-//  console.log("rows", rows);
-//  console.log("error", err);
-if (rows) {
-console.log("회원가입 성공");
-res.json({result:'success'});  
-} else {
-console.log("회원가입 실패",err);
-res.json({result:'fail'});  
-}});
-}});
+          member_id,member_pw,member_name,member_phone,member_birthdate,
+          member_addr, member_height, member_weight, guardian_name,
+          guardian_phone, sleep_time, sleep_lightening) values 
+        (?,?,?,?,?,?,?,?,?,?,?,?)`;
+      conn.query(
+        sql,
+        [
+          userId,
+          userPw,
+          userName,
+          userNumber,
+          birthDate2,
+          addr,
+          height,
+          weight,
+          guardianName,
+          guardianNumber,
+          sleep_time,
+          sleep_lightening
+        ],
+        (err, rows) => {
+          if (rows) {
+            console.log("user.js 회원가입 성공");
+            res.json({ result: 'success' });
+          } else {
+            console.log("user.js 회원가입 실패", err);
+            res.json({ result: 'fail' });
+          }
+        });
+    }
+  });
 });
 
-
-
-
-
-  // //회원 중복 검사
-  // const sql = `select member_id from members where member_id=?`;
-  // conn.query(sql, [userId, userPw], (err, rows) => {
-  //   if (rows.length > 0) {
-  //     res.send(`<script>
-  //         alert('이미 사용중인 아이디입니다');
-  //         location.href='/signup';
-  //         </script>`);
-  //   } else {
-  //     const sql = `insert into members values 
-  //                 (?,?,?,?,?,?,?,?,?,?)`;
-  //     conn.query(
-  //       sql,
-  //       [
-  //         userId,
-  //         userPw,
-  //         userName,
-  //         userNumber,
-  //         birthDate,
-  //         addr,
-  //         height,
-  //         weight,
-  //         guardianName,
-  //         guardianNumber,
-  //       ],
-  //       (err, rows) => {
-  //         //  console.log("rows", rows);
-  //         //  console.log("error", err);
-  //         if (rows) {
-  //           console.log("회원가입 성공");
-  //           //res.redirect("/");
-  //         } else {
-  //           console.log("회원가입 실패");
-  //           res.send(`<script>alert("회원가입 실패"); 
-  //             location.href='/signup';
-  //             </script>`);
-  //           //alert는 브라우저 내에 내장된 기능인데 node.js는 브라우저 밖에서 작업하는 것이므로 alert를 실행하기 위해 script 태그를 보내주는 것
-  //         }
-  //       }
-  //     );
-  //   }
-  // });
-
-
-
-
 // 로그인 라우터
-// DB 연동 코드 추가
-// 로그인 성공
-// 로그인 실패
 router.post("/handleLogin", (req, res) => {
   console.log("로그인 요청", req.body);
   const { userId, userPw } = req.body;
 
-
-
-  const sql = `select member_id from members where
+  const sql = `select * from members where
                       member_id =? and member_pw=?`;
   conn.query(sql, [userId, userPw], (err, rows) => {
-    // console.log("err", err);
-    // console.log("rows", rows);
+
+    // members 테이블에 로그인 정보가 있을 시
     if (rows.length > 0) {
-      console.log("로그인 성공");
-      if(userId === 'admin'){
+      console.log("user.js 로그인 성공", rows[0]);
+
+      // session 에 저장.
+      req.session.loginInfo = rows[0];
+      
+      if (userId === 'admin') {
         console.log('admin입니다');
-        res.json({ result: "admin" });
-      }else{
+        res.json({ result: "admin"});
+      } else {
         console.log('회원입니다');
-      res.json({ result: "success" });}
+        res.json({ result: "success"});
+      }
     } else {
       console.log("로그인 실패");
       res.json({ result: "fail" });
@@ -172,13 +99,53 @@ router.post("/handleLogin", (req, res) => {
   });
 });
 
+// 세션 데이터 
+router.get('/getSession', (req, res)=>{
+  console.log("user.js : session data 내보냄.");
+  res.json(req.session.loginInfo);
+})
+
+
+
 // 로그아웃 라우터
+
 
 //로그아웃 기능
 router.get("/signOut", (req, res) => {
   req.session.destroy();
   res.redirect("/home"); //세션 다 삭제되었으므로 redirect 명령어가 잘 작동됨
 });
+
+
+// 아두이노 데이터 받기 skeleton code
+/*
+할 것 : db로 데이터 저장. session 에서 회원 id 받아서 저장.
+
+*/
+router.get('/sensorData', (req, res) => {
+
+  console.log("receiving data");
+  const sensor1Value = req.query.sensor1;
+  const sensor2Value = req.query.sensor2;
+  console.log('Received sensor data from Arduino:');
+  console.log('Sensor 1:', sensor1Value);
+  console.log('Sensor 2:', sensor2Value);
+
+  // 받아서 저장할 데이터
+
+  // Send response to Arduino if needed
+  res.send('Data received successfully');
+});
+
+// 아두이노로 명령 보내기 skeleton code
+// 나중에 확인해보고 필요없으면 sensorData 반환값으로 처리해도 됨.
+router.get('/sensorCommand', (req, res) => {
+  // Send commands to Arduino if needed
+  console.log("sending data to arduino");
+  res.send('Sending from combined serverNode');
+});
+
+
 
 //회원목록 기능
 router.get("/showList", (req, res) => {

@@ -1,6 +1,6 @@
 import './App.css';
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom'; // BrowserRouter as Router 삭제
 import HomePage from './pages/HomePage'; // 홈 페이지 컴포넌트 임포트
 import LoginPage from './pages/LoginPage'; // 로그인 페이지 컴포넌트 임포트
 import JoinPage from './pages/JoinPage'; // 회원가입 페이지 컴포넌트 임포트
@@ -12,6 +12,7 @@ import ChangeUiPage from './pages/ChangeUiPage'; // 정보 변경 페이지 컴�
 
 function App() {
   return (
+
       <Routes>
         <Route path="/home" element={<HomePage />} /> // 홈 페이지 경로
         <Route path="/login" element={<LoginPage />} /> // 로그인 페이지 경로
@@ -21,6 +22,7 @@ function App() {
         <Route path="/chart" element={<ChartPage />} /> // 차트 페이지 경로
         <Route path="/changeui" element={<ChangeUiPage />} /> // 정보 변경 페이지 경로
       </Routes>
+
   );
 }
 

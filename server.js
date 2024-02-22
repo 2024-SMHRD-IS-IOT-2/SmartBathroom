@@ -1,6 +1,10 @@
 // require, import...
 const express = require('express');
 const app = express();
+// const sessionRouter = require('./routes/session');
+const session = require('express-session');
+const fileStore = require('session-file-store')(session);
+
 
 // Router require 정의(indexRouter, userRouter)
 const indexRouter = require('./routes');
@@ -11,6 +15,14 @@ const userRouter = require('./routes/user');
 const path = require('path');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+
+// session
+app.use(session({
+    httpOnly : true,   // http 프로토콜을 통한 접근만 가능
+    resave : false,   // 불필요한 세션 저장 방지
+    secret : 'secret',  // 암호화 키
+    store : new fileStore()  // 세션 저장소
+}));
 
 // 정적인 파일을 가져오기 위한 미들웨어 
 app.use(express.static(path.join(__dirname, 'react-project', 'build')));
@@ -29,6 +41,8 @@ app.use(express.urlencoded({extended : true}));
 // router 
 app.use('/', indexRouter);
 app.use('/user', userRouter);
+
+
 
 
 // // 아두이노 데이터 받기 skeleton code
@@ -57,6 +71,9 @@ app.use('/user', userRouter);
 
 
 //server
+
+
+
 app.set('port', process.env.PORT || 3001); 
 app.listen(app.get('port'), ()=>{
     console.log(`port waiting ... 😵 on ${app.get('port')}`);

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,6 +14,29 @@ const UserPage = () => {
     name: '김●●',
     guardianName: '김●●의 보호자',
   };
+=======
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // 페이지 이동을 위해 useNavigate 훅 사용
+import axios from '../axios';
+
+const UserPage =  () => {
+  const navigate = useNavigate(); // 페이지 이동을 위한 네비게이트 함수
+  
+ 
+
+  //session 데이터 받아오기
+  let sessionData = {};
+  useEffect(async ()=>{
+    await axios.get('/user/getSession')
+    .then((res)=>{
+     sessionData = res.data;
+     console.log(sessionData);
+    })
+    .catch((e)=>{
+      console.log("error", e);
+    })
+  },[]);
+>>>>>>> 0d96cbc6e0b68eea9936ea36322210fd1c14065e
 
   const goToChartPage = () => {
     navigate('/chart');
@@ -25,6 +49,11 @@ const UserPage = () => {
   const logout = () => {
     navigate('/login');
   };
+
+
+
+
+  
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh', padding: '20px' }}>

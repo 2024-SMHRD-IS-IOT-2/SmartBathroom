@@ -31,15 +31,16 @@ const UserPage = () => {
   };
 
   const logout = () => {
+    alert('로그아웃 하였습니다.');
     navigate('/home');
   };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh', padding: '20px' }}>
       <div style={{ position: 'absolute', top: '10px', right: '20px' }}>
-        <button onClick={goToChartPage} style={{ fontSize: '1em', marginRight: '10px' }}>차트</button>
+        <button onClick={goToChartPage} style={{ fontSize: '1em', marginRight: '10px' }}>Chart</button>
         <button onClick={goToChangeUiPage} style={{ fontSize: '1em', marginRight: '10px' }}>회원정보 변경</button>
-        <button onClick={logout} style={{ fontSize: '1em' }}>로그아웃</button>
+        <button onClick={logout} style={{ fontSize: '1em' }}>Logout</button>
       </div>
       <h1>{sessionData.username}님의 정보</h1>
       <div style={{ textAlign: 'center', width: '100%' }}>

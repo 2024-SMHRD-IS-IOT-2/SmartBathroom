@@ -110,7 +110,10 @@ router.get('/getSession', (req, res)=>{
 
 
 // 로그아웃 라우터
-
+router.post('/handleLogout', (req, res)=>{
+  req.session.destroy();
+  res.json({result : 'success'})
+})
 
 //로그아웃 기능
 router.get("/signOut", (req, res) => {

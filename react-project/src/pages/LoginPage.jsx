@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // 페이지 이동을 위해 useNavigate 훅을 사용합니다.
-import axios from 'axios'; // axios를 임포트합니다.
+import axios from '../axios'; // axios를 임포트합니다.
 
 const LoginPage = () => {
   const [userId, setUserId] = useState(''); // 아이디 상태

@@ -1,31 +1,47 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom'; // 페이지 이동을 위해 useNavigate 훅 사용
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const UserPage = () => {
-  const navigate = useNavigate(); // 페이지 이동을 위한 네비게이트 함수
+  const navigate = useNavigate();
+  const [sleepTime, setSleepTime] = useState(8);
+  const [sleepLightening, setsleepLightening] = useState(50);
 
-  // 차트 페이지로 이동
+  // 사용자 데이터
+  const currentUser = {
+    id: 1,
+    username: 'user2',
+    name: '김●●',
+    guardianName: '김●●의 보호자',
+  };
+
   const goToChartPage = () => {
     navigate('/chart');
   };
 
-  // 정보 변경 페이지로 이동
   const goToChangeUiPage = () => {
     navigate('/changeui');
   };
 
-  // 로그인 페이지로 이동하여 로그아웃 처리
   const logout = () => {
-    // 로그아웃 로직 구현. 예를 들어, 로컬 스토리지에서 사용자 정보를 제거합니다.
     navigate('/login');
   };
 
   return (
-    <div>
-      <h1>사용자 페이지</h1>
-      <button onClick={goToChartPage}>차트 보기</button> {/* 차트 페이지로 이동 */}
-      <button onClick={goToChangeUiPage}>정보 변경</button> {/* 정보 변경 페이지로 이동 */}
-      <button onClick={logout}>로그아웃</button> {/* 로그아웃 처리 및 로그인 페이지로 이동 */}
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh', padding: '20px' }}>
+      <div style={{ position: 'absolute', top: '10px', right: '20px' }}>
+        <button onClick={goToChartPage} style={{ fontSize: '1em', marginRight: '10px' }}>차트</button>
+        <button onClick={goToChangeUiPage} style={{ fontSize: '1em', marginRight: '10px' }}>회원정보 변경</button>
+        <button onClick={logout} style={{ fontSize: '1em' }}>로그아웃</button>
+      </div>
+      <h1>{currentUser.username}님의 정보</h1>
+      <div style={{ textAlign: 'center', width: '100%' }}>
+        <p style={{ fontSize: '1.5em', marginBottom: '10px' }}>이름: {currentUser.name}</p>
+        <p style={{ fontSize: '1.5em', marginBottom: '10px' }}>보호자 이름: {currentUser.guardianName}</p>
+        <p style={{ fontSize: '1.5em', marginBottom: '10px' }}>수면 시간: {sleepTime} 시간</p>
+        <input type="range" min="4" max="12" value={sleepTime} onChange={(e) => setSleepTime(e.target.value)} style={{ width: '80%', marginBottom: '20px' }} />
+        <p style={{ fontSize: '1.5em', marginBottom: '10px' }}>조명 밝기: {sleepLightening}%</p>
+        <input type="range" min="0" max="100" value={sleepLightening} onChange={(e) => setsleepLightening(e.target.value)} style={{ width: '80%' }} />
+      </div>
     </div>
   );
 };

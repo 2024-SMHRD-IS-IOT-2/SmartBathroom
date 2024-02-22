@@ -19,7 +19,7 @@ router.post('/handleJoin', (req, res) => {
     height,
     weight,
     guardianName,
-    guardianNumber,
+    guardianNumber
   } = req.body;
   let birthDate2 = birthDate.replace(/\//g, "-");
   const sql = `select member_id from members where member_id=?`;
@@ -46,7 +46,7 @@ router.post('/handleJoin', (req, res) => {
           height,
           weight,
           guardianName,
-          guardianNumber,
+          guardianNumber
         ],
         (err, rows) => {
           if (rows) {
@@ -103,12 +103,95 @@ router.get('/getSession', (req, res)=>{
 })
 
 
+// 개인정보 수정(ChangeUi)
+router.post("/handleModify", (req, res) => {
+  console.log("Modify Member Info", req.body);
+  const {
+    userPw,
+    userNumber,
+    addr,
+    height,
+    weight,
+    guardianName,
+    guardianNumber,
+    userId,
+    selectedId
+  } = req.body;
+  //일반 회원
+  if (!selectedId) {
+    
+    const sql = `UPDATE members
+                 SET member_pw = ?, member_phone = ?, member_addr = ?,
+                     member_height = ?, member_weight = ?, guardian_name = ?, 
+                     guardian_phone = ?
+                 WHERE member_id = ?`;
+    conn.query(
+      sql,
+      [
+        userPw,
+        userNumber,
+        addr,
+        height,
+        weight,
+        guardianName,
+        guardianNumber,
+        userId
+      ],
+      (err, result) => {
+        console.log(result);
+        if (result.changedRows > 0) {
+          res.json({ result: "success" });
+          console.log("user.js 회원정보 수정 완료 일반회원");
+        } else {
+          console.log("err:", err);
+          res.json({ result: "fail" });
+          console.log("user.js 회원정보 수정 실패 일반회원");
+        }
+      }
+    );
+    //관리자
+  } else {
+    const sql = `UPDATE members
+                 SET member_pw = ?, member_phone = ?, member_addr = ?,
+                     member_height = ?, member_weight = ?, guardian_name = ?, 
+                     guardian_phone = ? where member_id=?`;
+    conn.query(
+      sql,
+      [userPw, userNumber, addr, height, weight, guardianName, guardianNumber,selectedId],
+      (err, result) => {
+        console.log(result);
+        if (result.changedRows > 0) {
+          res.json({ result: "success" });
+          console.log("user.js 회원정보 수정 완료 관리자");
+        } else {
+          console.log("err:", err);
+          res.json({ result: "fail" });
+          console.log("user.js 회원정보 수정 실패 관리자");
+        }
+      }
+    );
+  }
+});
 
-// 로그아웃 라우터
-router.post('/handleLogout', (req, res)=>{
-  req.session.destroy();
-  res.json({result : 'success'})
-})
+//관리자 페이지 : 열람기능
+router.post("/showList", (req, res) => {
+  console.log("showList", req.body);
+  const sql = `Select *
+                 from members where member_id!='admin'`;
+  conn.query(sql, (err, rows) => {
+    console.log(rows);
+    if (rows.length > 0) {
+      console.log(rows);
+      res.json({ rows: rows, result: "success" });
+      console.log("user.js 관리자가 열람할 회원정보 보냈습니다");
+    } else {
+      console.log("err:", err);
+      res.json({ result: "fail" });
+      console.log("user.js 오류발생");
+    }
+  });
+});
+
 
 // 아두이노 데이터 받기 skeleton code
 /*
@@ -137,69 +220,5 @@ router.get('/sensorCommand', (req, res) => {
   console.log("sending data to arduino");
   res.send('Sending from combined serverNode');
 });
-
-
-
-
-//////////////////이 이하는 작업중 내지 더미////////////
-
-//로그아웃 기능
-router.get("/signOut", (req, res) => {
-  req.session.destroy();
-  res.redirect("/home"); //세션 다 삭제되었으므로 redirect 명령어가 잘 작동됨
-});
-
-//회원정보 기능
-router.get("/showMember", (req, res) => {
-  console.log("showMember data", req.query);
-  //if (req.query.userId !== "admin") {
-  if (userId !== "admin") {
-    //관리자 아닐 경우 = 특정 회원만
-    const sql = `select * from members
-          where member_id =?`;
-    //conn.query(sql, [req.query.userId], (err, rows) => {
-    conn.query(sql, ["1234"], (err, rows) => {
-      console.log("err", err);
-      console.log("rows", rows);
-      res.json({ result: rows });
-    });
-  } else {
-    //관리자 = 전체회원 검색
-    const sql = `select * from members where member_id != "admin"`;
-    conn.query(sql, (err, rows) => {
-      console.log("err", err);
-      console.log("rows", rows);
-      res.json({ result: rows });
-    });
-  }
-});
-
-// 탈퇴 라우터
-// DB연동 추가
-//회원탈퇴 기능
-router.post("/handleDelete", (req, res) => {
-  console.log("delete data", req.body);
-  const { userId, userPw } = req.body;
-  const sql = `delete from members where member_id=? and member_pw=?`;
-  conn.query(sql, [userId, userPw], (err, rows) => {
-    console.log("rows", rows);
-    if (rows.affectedRows > 0) {
-      res.redirect("/");
-    } else {
-      res.send(`<script>
-            alert('존재하지 않는 회원정보입니다.');
-            location.href='/delete';
-            </script>`);
-    }
-  });
-});
-
-// 차트 데이터 조회 라우터
-// DB 연동 코드 추가
-
-// 차트 UI페이지 차트 유형
-// 유형 ,저장 및 공유
-// DB 연동 코드 추가
-
 
 module.exports = router;

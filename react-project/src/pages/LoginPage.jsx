@@ -68,8 +68,8 @@ const LoginPage = () => {
           />
         </div>
         <button type="submit">로그인</button>
-      <button onClick={() => navigate('/join')}>회원가입</button> {/* 회원가입 페이지로 이동 */}
-      <button onClick={() => navigate('/home')}>홈으로</button> {/* 홈 페이지로 이동 */}
+      <button onClick={() => navigate('/join')}>Sign</button> {/* 회원가입 페이지로 이동 */}
+      <button onClick={() => navigate('/home')}>Home</button> {/* 홈 페이지로 이동 */}
       </form>
     </div>
   );

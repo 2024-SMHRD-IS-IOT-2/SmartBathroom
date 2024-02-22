@@ -9,8 +9,15 @@ const AdminPage = () => {
   useEffect(async () => {
     
     try {
-      const response = await axios.get('/user/showList');
-      setUsers(response.data); 
+      await axios.post('/user/showList')
+      .then((res)=>{
+        if (res.data.result === "success"){
+          console.log(res.data.rows);
+          setUsers(res.data.rows); 
+        }
+
+      })
+    
     } catch (error) {
       console.error('Error fetching user:', error);
     }
@@ -24,23 +31,25 @@ const AdminPage = () => {
 
   // 로그아웃 처리
   const logout = () => {
-    // 로그아웃 로직 구현 위치
+  // 로그아웃 로직 구현 위치
+    alert('로그아웃 하였습니다');
     navigate('/login');
   };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', height: '100vh', padding: '20px' }}>
-      <h1 style={{ textAlign: 'left', margin: '0', fontSize: '1.5em' }}>관리자</h1>
+      <h1 style={{ textAlign: 'left', margin: '0', fontSize: '1.5em' }}>Manager</h1>
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px', marginTop: '10px', position: 'absolute', top: '0', right: '20px' }}>
         <button onClick={() => navigate('/home')} style={{ fontSize: '1em', marginRight: '10px' }}>Home</button>
-        <button onClick={logout} style={{ fontSize: '1em' }}>Logout</button>
+        <button onClick={() => navigate('/login')} style={{ fontSize: '1em' }}>Logout</button>
       </div>
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         {users.map((user) => (
-          <div key={user.id} onClick={() => goToChangeUiPage(user.id)} style={{ cursor: 'pointer', margin: '10px', border: '1px solid #ccc', padding: '10px', width: '30%', boxSizing: 'border-box' }}>
-            <p>이름: {user.name}</p>
-            <p>보호자 이름: {user.guardianName}</p>
-            <p>연락처: {user.contact}</p>
+          <div key={user.member_id} onClick={() => goToChangeUiPage(user.id)} style={{ cursor: 'pointer', margin: '10px', border: '1px solid #ccc', padding: '10px', width: '30%', boxSizing: 'border-box' }}>
+            <p>이름: {user.member_name}</p>
+            <p>연락처: {user.member_phone}</p>
+            <p>보호자 이름: {user.guardian_name}</p>
+            <p>보호자 연락처:{user.guardian_phone}</p>
           </div>
         ))}
       </div>

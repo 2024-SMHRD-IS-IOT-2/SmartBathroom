@@ -6,6 +6,12 @@ const ChangeUiPage = () => {
   const navigate = useNavigate();
   const { userId } = useParams();
 
+  const handleChange = (e) => {
+    const { name, value } = e.target; // 이벤트가 발생한 요소에서 name과 value를 추출합니다.
+    setUserInfo({ ...userInfo, [name]: value }); // 기존 상태에 변경사항을 반영하여 새로운 상태를 설정합니다.
+  };
+  
+
   const [userInfo, setUserInfo] = useState({
     userId: '',
     userDate: '',
@@ -19,38 +25,17 @@ const ChangeUiPage = () => {
     guardianNumber: '',
   });
 
-  
-   //session 데이터 받아오기
-   let sessionData = {};
-   useEffect(async ()=>{
-     await axios.get('/user/getSession')
-     .then((res)=>{
-      sessionData = res.data;
-      console.log(sessionData);
-     })
-     .catch((e)=>{
-       console.log("error", e);
-     })
-   },[]);
-
   useEffect(() => {
-    // 비동기 함수 선언
-    const fetchUserInfo = async () => {
+    // 즉시 실행 함수 패턴을 사용하여 비동기 로직 처리
+    (async () => {
       try {
-        const response = await axios.get(`/user/${userId}`);
-        setUserInfo(response.data);
-      } catch (error) {
-        console.error('Error fetching user info:', error);
+        const res = await axios.get('/user/getSession');
+        setUserInfo({ ...userInfo, ...res.data }); // 상태 업데이트
+      } catch (e) {
+        console.error("Error fetching session data:", e);
       }
-    };
-  
-    fetchUserInfo();
-  }, [userId]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setUserInfo(prev => ({ ...prev, [name]: value }));
-  };
+    })();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -26,6 +26,7 @@ const JoinPage = () => {
     const inputs = {
       userId: userIdRef.current.value.trim(),
       userPw: userPwRef.current.value.trim(),
+      userPw2: userPw2Ref.current.value.trim(),
       userName: userNameRef.current.value.trim(),
       userNumber: userNumberRef.current.value.trim(),
       birthDate: birthDateRef.current.value.trim(),
@@ -44,6 +45,7 @@ const JoinPage = () => {
 
     // 비밀번호 확인 로직
     if (inputs.userPw !== inputs.userPw2) {
+      console.log(inputs.userPw, inputs.userPw2);
       alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
       return;
     }

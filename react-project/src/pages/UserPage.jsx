@@ -9,15 +9,19 @@ const UserPage =  () => {
 
   //session 데이터 받아오기
   let sessionData = {};
-  useEffect(async ()=>{
-    await axios.get('/user/getSession')
-    .then((res)=>{
-     sessionData = res.data;
-     console.log(sessionData);
-    })
-    .catch((e)=>{
-      console.log("error", e);
-    })
+  useEffect( ()=>{
+    const getLoginData = async ()=>{
+      await axios.get('/user/getSession')
+      .then((res)=>{
+       sessionData = res.data;
+       console.log(sessionData);
+      })
+      .catch((e)=>{
+        console.log("error", e);
+      })
+    }
+    getLoginData();
+
   },[]);
 
   // 차트 페이지로 이동
@@ -27,7 +31,9 @@ const UserPage =  () => {
 
   // 정보 변경 페이지로 이동
   const goToChangeUiPage = () => {
-    navigate('/changeui');
+
+    console.log("고투체인지 오류");
+    navigate('/changeui', {state:sessionData});
   };
 
   // 로그인 페이지로 이동하여 로그아웃 처리
@@ -37,9 +43,6 @@ const UserPage =  () => {
   };
 
 
-
-
-  
 
   return (
     <div>

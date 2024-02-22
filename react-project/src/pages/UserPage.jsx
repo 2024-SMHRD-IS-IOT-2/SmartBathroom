@@ -31,16 +31,20 @@ const UserPage = () => {
   };
 
   const logout = () => {
-    alert('로그아웃 하였습니다.');
     navigate('/home');
+  };
+
+  const saveSettings = () => {
+    // 여기에 설정을 저장하는 로직을 추가하세요.
+    console.log('Settings saved!');
   };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh', padding: '20px' }}>
       <div style={{ position: 'absolute', top: '10px', right: '20px' }}>
-        <button onClick={goToChartPage} style={{ fontSize: '1em', marginRight: '10px' }}>Chart</button>
+        <button onClick={goToChartPage} style={{ fontSize: '1em', marginRight: '10px' }}>차트</button>
         <button onClick={goToChangeUiPage} style={{ fontSize: '1em', marginRight: '10px' }}>회원정보 변경</button>
-        <button onClick={logout} style={{ fontSize: '1em' }}>Logout</button>
+        <button onClick={logout} style={{ fontSize: '1em' }}>로그아웃</button>
       </div>
       <h1>{sessionData.username}님의 정보</h1>
       <div style={{ textAlign: 'center', width: '100%' }}>
@@ -50,6 +54,11 @@ const UserPage = () => {
         <input type="range" min="4" max="12" value={sleepTime} onChange={(e) => setSleepTime(e.target.value)} style={{ width: '80%', marginBottom: '20px' }} />
         <p style={{ fontSize: '1.5em', marginBottom: '10px' }}>조명 밝기: {sleepLightening}%</p>
         <input type="range" min="0" max="100" value={sleepLightening} onChange={(e) => setSleepLightening(e.target.value)} style={{ width: '80%' }} />
+        <button onClick={saveSettings} style={{ fontSize: '1em', marginTop: '20px' }}>설정 저장</button>
+      </div>
+      <div style={{ width: '20%', marginTop: '20px', backgroundColor: '#f0f0f0' }}>
+        {/* 여기에 차트를 표시하는 컴포넌트를 추가하세요. */}
+        <p>차트를 표시하는 공간</p>
       </div>
     </div>
   );

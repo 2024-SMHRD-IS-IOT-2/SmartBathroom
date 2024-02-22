@@ -20,7 +20,7 @@ router.post("/handleJoin", (req, res) => {
     height,
     weight,
     guardianName,
-    guardianNumber,
+    guardianNumber
   } = req.body;
   let birthDate2 = birthDate.replace(/\//g, "-");
   const sql = `select member_id from members where member_id=?`;
@@ -47,7 +47,7 @@ router.post("/handleJoin", (req, res) => {
           height,
           weight,
           guardianName,
-          guardianNumber,
+          guardianNumber
         ],
         (err, rows) => {
           if (rows) {
@@ -64,7 +64,8 @@ router.post("/handleJoin", (req, res) => {
 });
 
 // 로그인 라우터
-router.post("/handleLogin", (req, res) => {
+
+router.post("/handleSignIn", (req, res) => {
   console.log("user.js 로그인 요청", req.body);
   const { userId, userPw } = req.body;
 
@@ -104,37 +105,6 @@ router.get('/getSession', (req, res)=>{
 })
 
 
-//유저 페이지
-
-router.post("/userPage", (req, res) => {
-  console.log("유저 페이지 정보", req.body);
-  const { userId, userPw } = req.body;
-
-  const sql = `select member_id from members where
-                      member_id =? and member_pw=?`;
-  conn.query(sql, [userId, userPw], (err, rows) => {
-    // console.log("err", err);
-    // console.log("rows", rows);
-    if (rows.length > 0) {
-      // 로그인 성공
-      console.log("user.js 로그인 성공");
-      // 관리자 로그인
-      if (userId === "admin") {
-        console.log("user.js admin입니다");
-        res.json({ result: "admin" });
-      } else {
-        // 회원 로그인
-        console.log("user.js 회원입니다");
-        res.json({ result: "success" });
-      }
-    } else {
-      // 로그인 실패
-      console.log("user.js 로그인 실패");
-      res.json({ result: "fail" });
-    }
-  });
-});
-
 // 개인정보 수정(ChangeUi)
 router.post("/handleModify", (req, res) => {
   console.log("Modify Member Info", req.body);
@@ -147,14 +117,16 @@ router.post("/handleModify", (req, res) => {
     guardianName,
     guardianNumber,
     userId,
+    selectedId
   } = req.body;
   //일반 회원
-  if (userId !== "admin") {
+  if (!selectedId) {
+    
     const sql = `UPDATE members
                  SET member_pw = ?, member_phone = ?, member_addr = ?,
                      member_height = ?, member_weight = ?, guardian_name = ?, 
                      guardian_phone = ?
-                 WHERE member_id = ? and member_pw= ?`;
+                 WHERE member_id = ?`;
     conn.query(
       sql,
       [
@@ -165,8 +137,7 @@ router.post("/handleModify", (req, res) => {
         weight,
         guardianName,
         guardianNumber,
-        userId,
-        userPw,
+        userId
       ],
       (err, result) => {
         console.log(result);
@@ -185,10 +156,10 @@ router.post("/handleModify", (req, res) => {
     const sql = `UPDATE members
                  SET member_pw = ?, member_phone = ?, member_addr = ?,
                      member_height = ?, member_weight = ?, guardian_name = ?, 
-                     guardian_phone = ?`;
+                     guardian_phone = ? where member_id=?`;
     conn.query(
       sql,
-      [userPw, userNumber, addr, height, weight, guardianName, guardianNumber],
+      [userPw, userNumber, addr, height, weight, guardianName, guardianNumber,selectedId],
       (err, result) => {
         console.log(result);
         if (result.changedRows > 0) {
@@ -205,13 +176,13 @@ router.post("/handleModify", (req, res) => {
 });
 
 //관리자 페이지 : 열람기능
-router.post("/adminPage", (req, res) => {
-  console.log("Admin Page", req.body);
+router.post("/showList", (req, res) => {
+  console.log("showList", req.body);
   const sql = `Select *
-                 from members`;
+                 from members where member_id!='admin'`;
   conn.query(sql, (err, rows) => {
     console.log(rows);
-    if (rows.length = 0) {
+    if (rows.length > 0) {
       console.log(rows);
       res.json({ rows: rows, result: "success" });
       console.log("user.js 관리자가 열람할 회원정보 보냈습니다");
@@ -306,54 +277,6 @@ router.post("/handleDelete", (req, res) => {
             </script>`);
     }
   });
-});
-
-///////////일단 이 밑으로는 아직 작업중.....//////
-
-// 회원정보 수정
-router.post("/modify", (req, res) => {
-  console.log("Modify Member Info", req.body);
-  const {
-    member_pw,
-    member_phone,
-    member_addr,
-    member_height,
-    member_weight,
-    guardian_phone,
-    guardian_name,
-    sleep_time,
-    sleep_lightening,
-  } = req.body;
-  //////////////////여기서 막힘////////////////////////////
-  const sql = `update members set ${변수} = ${변경값} from 
-                     members where member_id =? and member_pw=?`;
-  conn.query(sql, [{ 변수 }, member_id, member_pw], (err, rows) => {
-    /////////////////챗선샌님의 해결책//////////////////////
-    // const sql = `UPDATE members
-    //              SET member_pw = ?, member_phone = ?, member_addr = ?,
-    //                  member_height = ?, member_weight = ?, guardian_phone = ?, guardian_name = ?,
-    //                  sleep_time = ?, sleep_lightening = ?
-    //              WHERE member_id = ? and member_pw= ?`;
-    //         conn.query(sql,[member_pw, member_phone, member_addr,
-    //             member_height, member_weight, guardian_phone, guardian_name,
-    //             sleep_time, sleep_lightening, memberId], (err, result) => {
-    ////////////////여기까지가 챗선샌님의 대답///////////////
-    // console.log("err", err);
-    // console.log("rows", rows);
-    if (rows.length > 0) {
-      console.log("로그인 성공");
-      // res.redirect("/"); //서버 단에서 작동하는 것 세션 작업 후에는 잘 작동 안 되므로 클라이언트 측에서 작동하는 JS형태의 location.href 명령어 써 주자
-      res.send(`<script>location.href='/'</script>`);
-    } else {
-      console.log("로그인 실패");
-      res.send(`<script>
-                  alert('로그인 실패');
-                  location.href = '/signin';
-                  </script>
-                  `);
-    }
-  });
-  res.json({ result: "success" });
 });
 
 // 차트 데이터 조회 라우터

@@ -31,27 +31,29 @@ app.use('/', indexRouter);
 app.use('/user', userRouter);
 
 
-// 아두이노 데이터 받기 skeleton code
-app.get('/sensorData', (req, res) => {
+// // 아두이노 데이터 받기 skeleton code
+// app.get('/sensorData', (req, res) => {
 
-    console.log("receiving data");
-  const sensor1Value = req.query.sensor1;
-  const sensor2Value = req.query.sensor2;
-  console.log('Received sensor data from Arduino:');
-  console.log('Sensor 1:', sensor1Value);
-  console.log('Sensor 2:', sensor2Value);
+//     console.log("receiving data");
+//   const sensor1Value = req.query.sensor1;
+//   const sensor2Value = req.query.sensor2;
+//   console.log('Received sensor data from Arduino:');
+//   console.log('Sensor 1:', sensor1Value);
+//   console.log('Sensor 2:', sensor2Value);
 
-  // Send response to Arduino if needed
-  res.send('Data received successfully');
-});
+//   // 받아서 저장할 데이터
 
-// 아두이노로 명령 보내기 skeleton code
-// 나중에 확인해보고 필요없으면 sensorData 반환값으로 처리해도 됨.
-app.get('/sensorCommand', (req, res) => {
-  // Send commands to Arduino if needed
-  console.log("sending data to arduino");
-  res.send('Sending from combined serverNode');
-});
+//   // Send response to Arduino if needed
+//   res.send('Data received successfully');
+// });
+
+// // 아두이노로 명령 보내기 skeleton code
+// // 나중에 확인해보고 필요없으면 sensorData 반환값으로 처리해도 됨.
+// app.get('/sensorCommand', (req, res) => {
+//   // Send commands to Arduino if needed
+//   console.log("sending data to arduino");
+//   res.send('Sending from combined serverNode');
+// });
 
 
 //server

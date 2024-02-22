@@ -11,6 +11,8 @@ const LoginPage = () => {
     e.preventDefault(); // 폼 제출 시 페이지 리로드 방지
     console.log(`Email: ${email}, Password: ${password}`); // 콘솔에 이메일과 비밀번호 출력
     // 로그인 로직 구현 위치. 성공 시 페이지 이동 등의 처리를 여기에 추가합니다.
+
+    
   };
 
   return (

@@ -88,6 +88,37 @@ router.get('/signOut',(req,res)=>{
     res.redirect('/'); //세션 다 삭제되었으므로 redirect 명령어가 잘 작동됨
   })
 
+
+// 아두이노 데이터 받기 skeleton code
+/*
+할 것 : db로 데이터 저장. session 에서 회원 id 받아서 저장.
+
+*/
+router.get('/sensorData', (req, res) => {
+
+  console.log("receiving data");
+  const sensor1Value = req.query.sensor1;
+  const sensor2Value = req.query.sensor2;
+  console.log('Received sensor data from Arduino:');
+  console.log('Sensor 1:', sensor1Value);
+  console.log('Sensor 2:', sensor2Value);
+
+  // 받아서 저장할 데이터
+
+  // Send response to Arduino if needed
+  res.send('Data received successfully');
+});
+
+// 아두이노로 명령 보내기 skeleton code
+// 나중에 확인해보고 필요없으면 sensorData 반환값으로 처리해도 됨.
+router.get('/sensorCommand', (req, res) => {
+  // Send commands to Arduino if needed
+  console.log("sending data to arduino");
+  res.send('Sending from combined serverNode');
+});
+
+
+
 //회원목록 기능
 router.get("/showList", (req, res) => {
     console.log("showList data", req.query);

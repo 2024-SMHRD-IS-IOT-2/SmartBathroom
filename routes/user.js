@@ -146,7 +146,7 @@ res.json({result:'fail'});
 // DB 연동 코드 추가
 // 로그인 성공
 // 로그인 실패
-router.post("/handleSignIn", (req, res) => {
+router.post("/handleLogin", (req, res) => {
   console.log("로그인 요청", req.body);
   const { userId, userPw } = req.body;
 
@@ -224,6 +224,7 @@ router.post("/handleDelete", (req, res) => {
 });
 
 ///////////일단 이 밑으로는 아직 작업중.....//////
+// user.js (Node.js 서버 라우터 파일)
 
 // 회원정보 수정
 router.post("/modify", (req, res) => {

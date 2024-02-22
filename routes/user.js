@@ -72,9 +72,6 @@ router.post('/handleJoin', (req, res) => {
 
 
 // 로그인 라우터
-// DB 연동 코드 추가
-// 로그인 성공
-// 로그인 실패
 router.post("/handleLogin", (req, res) => {
   console.log("user.js 로그인 요청", req.body);
   const { userId, userPw } = req.body;
@@ -92,10 +89,10 @@ router.post("/handleLogin", (req, res) => {
       
       if (userId === 'admin') {
         console.log('admin입니다');
-        res.json({ result: "admin" });
+        res.json({ result: "admin"});
       } else {
         console.log('회원입니다');
-        res.json({ result: "success" });
+        res.json({ result: "success"});
       }
     } else {
       console.log("로그인 실패");
@@ -103,6 +100,14 @@ router.post("/handleLogin", (req, res) => {
     }
   });
 });
+
+// 세션 데이터 
+router.get('/getSession', (req, res)=>{
+  console.log("user.js : session data 내보냄.");
+  res.json(req.session.loginInfo);
+})
+
+
 
 // 로그아웃 라우터
 

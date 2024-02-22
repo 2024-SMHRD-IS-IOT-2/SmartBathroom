@@ -24,7 +24,7 @@ const LoginPage = () => {
               alert('회원 로그인에 성공했습니다.');
               navigate('/user'); // 유저 페이지로 이동
 
-            } else if (res.data.result === "success") {
+            } else if (res.data.result === "admin") {
               alert('관리자 로그인에 성공했습니다.');
               navigate('/admin'); // 유저 페이지로 이동
             }

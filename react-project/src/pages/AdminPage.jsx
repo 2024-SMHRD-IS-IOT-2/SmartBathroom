@@ -41,10 +41,14 @@ const AdminPage = () => {
   };
 
   // 로그아웃 처리
-  const logout = () => {
-    // 로그아웃 로직 구현 위치
-    alert('로그아웃 하였습니다');
-    navigate('/login');
+  const logout = async () => {
+    await axios.post('user/handleLogout')
+    .then ((res)=>{
+      if (res.data.result === 'success'){
+        alert("로그아웃됨");
+        navigate('/home');
+      }
+    });
   };
 
   return (

@@ -17,6 +17,14 @@ const int serverPort = 3001; // Port of your Node.js server
 const char* userId = "asdf";
 
 WiFiClient wifiClient;
+//LED 밝기 조절.
+bool isSleepLightOn = false;
+int sleepLightBright = 80;
+
+//LED on/off
+
+//환풍기 on/off
+
 
 void setup() {
   Serial.begin(115200);
@@ -69,13 +77,10 @@ void sendDataToServer() {
   sendRequest(url, data);
 }
 
-
-
 //send get request to node server. with sensor data.
 void sendRequest(String url, String data) {
   if (wifiClient.connect(serverAddress, serverPort)) {
     Serial.println("Connected to server");
-
     wifiClient.print("GET " + url + "?" + data + " HTTP/1.1\r\n");
     wifiClient.print("Host: " + String(serverAddress) + ":" + String(serverPort) + "\r\n");
     wifiClient.print("Connection: close\r\n\r\n");
@@ -87,8 +92,27 @@ void sendRequest(String url, String data) {
     }
 
     while (wifiClient.available()) {
-      String line = wifiClient.readStringUntil('\r');
-      Serial.print(line);
+      String line = wifiClient.readStringUntil('*');
+      Serial.println(line);
+      if (line == "true") { // 수면등 on
+        isSleepLightOn = true;
+        // Serial.println("수면등 on");
+
+      } else if ( line == "false") { // 수면등 off
+        isSleepLightOn = false;
+        // Serial.println("수면등 off");
+
+      } else { // 수면등 밝기
+        Serial.print("수면등 밝기 ");
+        Serial.println(line);
+        if (line.toInt() != 0){
+          sleepLightBright = line.toInt();
+        }
+      }
+      Serial.print("결과 : ");
+      Serial.print(isSleepLightOn);
+      Serial.print("....");
+      Serial.println(sleepLightBright);
     }
 
     wifiClient.stop();

@@ -103,9 +103,9 @@ router.get("/getSession", (req, res) => {
 })
 
 // 로그아웃 라우터
-router.post('/handleLogout', (req, res)=>{
+router.post('/handleLogout', (req, res) => {
   req.session.destroy();
-  res.json({result : 'success'})
+  res.json({ result: 'success' })
 });
 
 // 개인정보 수정(ChangeUi)
@@ -172,11 +172,6 @@ router.post("/showList", (req, res) => {
   });
 });
 
-//로그아웃 기능
-router.get("/handleLogout", (req, res) => {
-  req.session.destroy();
-  res.json({ result: "success" });
-});
 
 // 아두이노 데이터 받기 skeleton code
 /*
@@ -184,7 +179,7 @@ router.get("/handleLogout", (req, res) => {
 */
 router.get("/sensorData", (req, res) => {
   console.log("receiving data");
-  const {humidity,temp, nh3, meth, btnEmerg, falldown, member_id} = req.query;
+  const { humidity, temp, nh3, meth, btnEmerg, falldown, member_id } = req.query;
 
   console.log('Received sensor data from Arduino:');
   console.log(req.query);
@@ -193,7 +188,7 @@ router.get("/sensorData", (req, res) => {
   // 받은 아이디값으로 DB 저장
   const sql = `insert into sensors(sensor_humid, sensor_temp, sensor_nh3, member_id) 
                 values (?,?,?,?)`;
-  conn.query( sql,[humidity, temp, nh3, member_id],
+  conn.query(sql, [humidity, temp, nh3, member_id],
     (err, rows) => {
       if (rows) {
         console.log(`user.js 센서저장 성공.  아이디: ${member_id}`);
@@ -202,11 +197,45 @@ router.get("/sensorData", (req, res) => {
       }
     }
   );
+
+
   // 아두이노로 값 보내기.
-  
-  res.send('Data received successfully');
+  const sql2 = `select sleep_time, sleep_lightening from members where member_id=(?)`;
+  conn.query(sql2, [member_id],
+    (err, rows) => {
+      if (rows) {
+        console.log(`user.js 수면시간밝기 받아오기.  아이디: ${member_id}`);
+        // console.log(rows);
+        
+        let dateTime = new Date();
+        let startTime = rows[0].sleep_time.slice(0,5);
+        let endTime = rows[0].sleep_time.slice(6);
+        let isSleepLight = false;
+        
+        startTime = parseInt(startTime.replace(":",""));
+        endTime = parseInt(endTime.replace(":",""));
+        let curTime = dateTime.getHours() * 100 + dateTime.getMinutes();
+        
+        console.log(startTime);
+        console.log(endTime);
+        console.log(curTime);
+        
+        if (curTime > startTime || curTime < endTime) isSleepLight = true;
+        else isSleepLight = false; 
+        
+        res.send(`${isSleepLight}*${rows[0].sleep_lightening}*`);
+        
+      } else {
+        console.log("user.js 센서값 업데이트 실패", err);
+      }
+
+    }
+  );
+
 
 });
+
+
 
 // 아두이노로 명령 보내기 skeleton code
 // 나중에 확인해보고 필요없으면 sensorData 반환값으로 처리해도 됨.

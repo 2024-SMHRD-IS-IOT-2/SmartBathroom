@@ -33,7 +33,7 @@ form {
     max-width: 90%;
 }
 
-h1{
+h1 {
     font-family: 'JalnanGothic', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     text-align: center;
     color: #333;
@@ -52,18 +52,24 @@ input[type="date"] {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-    font-size: 16px; /* 변경된 부분 */
-    font-size: 16px; /* 변경된 부분 */
+    font-size: 16px;
+    /* 변경된 부분 */
+    font-size: 16px;
+    /* 변경된 부분 */
 }
 
 /* 라벨 스타일 */
 label {
     display: block;
-    margin-bottom: 10px; /* 변경된 부분 */
-    margin-bottom: 10px; /* 변경된 부분 */
+    margin-bottom: 10px;
+    /* 변경된 부분 */
+    margin-bottom: 10px;
+    /* 변경된 부분 */
     color: #333;
-    font-size: 18px; /* 변경된 부분 */
-    font-size: 18px; /* 변경된 부분 */
+    font-size: 18px;
+    /* 변경된 부분 */
+    font-size: 18px;
+    /* 변경된 부분 */
 }
 
 /* 버튼 스타일 */
@@ -72,14 +78,117 @@ button {
     width: 100%;
     background-color: #4CAF50;
     color: white;
-    padding: 16px 20px; /* 변경된 부분 */
-    margin: 10px 0; /* 변경된 부분 */
+    padding: 16px 20px;
+    /* 변경된 부분 */
+    margin: 10px 0;
+    /* 변경된 부분 */
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 18px; /* 변경된 부분 */
+    font-size: 18px;
+    /* 변경된 부분 */
 }
 
 button:hover {
     background-color: #45a049;
 }
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+
+/* AdminPage */
+.admin-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    height: 100vh;
+    padding: 20px;
+}
+
+.admin-title {
+    text-align: left;
+    margin: 0;
+    font-size: 1.5em;
+}
+
+.admin-area-btn {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    position: absolute;
+    top: 0;
+    right: 20px;
+}
+
+.admin-btn-main {
+    font-size: 1em;
+    margin-right: 10px;
+}
+
+.admin-btn-logout {
+    font-size: 1em;
+}
+
+.admin-area-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.admin-list-item {
+    cursor: pointer;
+    margin: 10px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 30%;
+    box-sizing: border-box;
+}
+.admin-modal {
+    position: fixed;
+    z-index: 999;
+    background-color: rgba(0, 0, 0, 0.5);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.admin-modal-content {
+    background-color: #fff;
+    padding: 20px;
+    max-width: 800px;
+    width: 80%;
+    margin: auto;
+    margin-top: 100px;
+    border-radius: 5px;
+    display: flex;
+    max-height: 80vh;
+}
+.admin-modal-left {
+    width: 300px;
+    margin-right: 20px;
+}
+.admin-modal-right {
+    flex: 1;
+    max-height: 100%;
+    overflow-y: auto;
+}
+.admin-modal-close {
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+
+
+.admin-modal-item-hl {
+    border: red solid 2px;
+    background-color: lightcoral;
+
+}
+
+
+/* UserPage */

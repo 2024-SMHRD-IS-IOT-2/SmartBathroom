@@ -31,7 +31,7 @@ const UserPage = () => {
   };
 
   const goToChangeUiPage = () => {
-    navigate('/changeui', {state : sessionData});
+    navigate('/changeui', {state : {data : sessionData, from : "user"}});
   };
 
   const logout = async () => {

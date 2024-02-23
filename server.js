@@ -21,7 +21,11 @@ app.use(session({
     httpOnly : true,   // http 프로토콜을 통한 접근만 가능
     resave : false,   // 불필요한 세션 저장 방지
     secret : 'secret',  // 암호화 키
-    store : new fileStore()  // 세션 저장소
+    store : new fileStore(),  // 세션 저장소
+    cookie : {
+        maxAge : 1000 * 60 * 60   // 세션 만료 1시간
+    }
+
 }));
 
 // 정적인 파일을 가져오기 위한 미들웨어 

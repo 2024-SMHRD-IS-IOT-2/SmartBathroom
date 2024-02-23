@@ -67,9 +67,9 @@ const LoginPage = () => {
             onChange={(e) => setUserPw(e.target.value)} // 비밀번호 입력 상태 업데이트
           />
         </div>
-        <button type="submit">Login</button>
-      <button onClick={() => navigate('/join')}>Sign</button> {/* 회원가입 페이지로 이동 */}
-      <button onClick={() => navigate('/home')}>Home</button> {/* 홈 페이지로 이동 */}
+        <button type="submit">로그인</button>
+      <button onClick={() => navigate('/join')}>회원가입</button> {/* 회원가입 페이지로 이동 */}
+      <button onClick={() => navigate('/home')}>메인화면</button> {/* 홈 페이지로 이동 */}
       </form>
     </div>
   );

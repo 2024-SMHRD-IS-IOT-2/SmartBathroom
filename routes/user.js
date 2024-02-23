@@ -7,9 +7,8 @@ const conn = require("../config/database");
 // const sleep_lightening = 50;
 
 // 회원가입 라우터
-
-router.post("/handleJoin", (req, res) => {
-  console.log("회원가입 요청...", req.body);
+router.post('/handleJoin', (req, res) => {
+  console.log('user.js 회원가입 요청...', req.body);
   const {
     userId,
     userPw,
@@ -20,7 +19,7 @@ router.post("/handleJoin", (req, res) => {
     height,
     weight,
     guardianName,
-    guardianNumber,
+    guardianNumber
   } = req.body;
   let birthDate2 = birthDate.replace(/\//g, "-");
   const sql = `select member_id from members where member_id=?`;
@@ -47,7 +46,7 @@ router.post("/handleJoin", (req, res) => {
           height,
           weight,
           guardianName,
-          guardianNumber,
+          guardianNumber
         ],
         (err, rows) => {
           if (rows) {
@@ -64,7 +63,6 @@ router.post("/handleJoin", (req, res) => {
 });
 
 // 로그인 라우터
-
 router.post("/handleLogin", (req, res) => {
   console.log("user.js 로그인 요청", req.body);
   const { userId, userPw } = req.body;
@@ -110,7 +108,6 @@ router.post('/handleLogout', (req, res)=>{
   res.json({result : 'success'})
 })
 
-
 // 개인정보 수정(ChangeUi)
 router.post("/handleModify", (req, res) => {
   console.log("Modify Member Info", req.body);
@@ -123,15 +120,16 @@ router.post("/handleModify", (req, res) => {
     guardianName,
     guardianNumber,
     userId,
-    
+    selectedId
   } = req.body;
   //일반 회원
-  if (userId !== "admin") {
+  if (!selectedId) {
+    
     const sql = `UPDATE members
                  SET member_pw = ?, member_phone = ?, member_addr = ?,
                      member_height = ?, member_weight = ?, guardian_name = ?, 
                      guardian_phone = ?
-                 WHERE member_id = ? and member_pw= ?`;
+                 WHERE member_id = ?`;
     conn.query(
       sql,
       [
@@ -142,8 +140,7 @@ router.post("/handleModify", (req, res) => {
         weight,
         guardianName,
         guardianNumber,
-        userId,
-        userPw,
+        userId
       ],
       (err, result) => {
         console.log(result);
@@ -162,10 +159,10 @@ router.post("/handleModify", (req, res) => {
     const sql = `UPDATE members
                  SET member_pw = ?, member_phone = ?, member_addr = ?,
                      member_height = ?, member_weight = ?, guardian_name = ?, 
-                     guardian_phone = ?`;
+                     guardian_phone = ? where member_id=?`;
     conn.query(
       sql,
-      [userPw, userNumber, addr, height, weight, guardianName, guardianNumber],
+      [userPw, userNumber, addr, height, weight, guardianName, guardianNumber,selectedId],
       (err, result) => {
         console.log(result);
         if (result.changedRows > 0) {
@@ -182,13 +179,13 @@ router.post("/handleModify", (req, res) => {
 });
 
 //관리자 페이지 : 열람기능
-router.post("/adminPage", (req, res) => {
-  console.log("Admin Page", req.body);
+router.post("/showList", (req, res) => {
+  console.log("showList", req.body);
   const sql = `Select *
-                 from members`;
+                 from members where member_id!='admin'`;
   conn.query(sql, (err, rows) => {
     console.log(rows);
-    if (rows.length = 0) {
+    if (rows.length > 0) {
       console.log(rows);
       res.json({ rows: rows, result: "success" });
       console.log("user.js 관리자가 열람할 회원정보 보냈습니다");
@@ -206,50 +203,32 @@ router.post("/adminPage", (req, res) => {
 할 것 : db로 데이터 저장. session 에서 회원 id 받아서 저장.
 */
 router.get('/sensorData', (req, res) => {
+
   console.log("receiving data");
-  const sensor1Value = req.query.sensor1;
-  const sensor2Value = req.query.sensor2;
+  const {humidity,temp, nh3, meth, btnEmerg, falldown, member_id} = req.query;
+
   console.log('Received sensor data from Arduino:');
-  console.log('Sensor 1:', sensor1Value);
-  console.log('Sensor 2:', sensor2Value);
+  console.log(req.query);
 
-  // 받아서 저장할 데이터
 
-  // Send response to Arduino if needed
+  // 받은 아이디값으로 DB 저장
+  const sql = `insert into sensors(sensor_humid, sensor_temp, sensor_nh3, member_id) 
+                values (?,?,?,?)`;
+  conn.query( sql,[humidity, temp, nh3, member_id],
+    (err, rows) => {
+      if (rows) {
+        console.log(`user.js 센서저장 성공.  아이디: ${member_id}`);
+      } else {
+        console.log("user.js 센서저장실패", err);
+      }
+    }
+  );
+
+  // 아두이노로 값 보내기.
+  
   res.send('Data received successfully');
-});
-
-// 아두이노로 명령 보내기 skeleton code
-// 나중에 확인해보고 필요없으면 sensorData 반환값으로 처리해도 됨.
-router.get('/sensorCommand', (req, res) => {
-  // Send commands to Arduino if needed
-  console.log("sending data to arduino");
-  res.send('Sending from combined serverNode');
-});
-
-
-
-
-//////////////////이 이하는 작업중 내지 더미////////////
-
-
-//회원정보 기능
-router.get("/showMember", (req, res) => {
 
 });
 
-// 탈퇴 라우터
-// DB연동 추가
-//회원탈퇴 기능
-router.post("/handleDelete", (req, res) => {
-
-});
-
-// 차트 데이터 조회 라우터
-// DB 연동 코드 추가
-
-// 차트 UI페이지 차트 유형
-// 유형 ,저장 및 공유
-// DB 연동 코드 추가
 
 module.exports = router;

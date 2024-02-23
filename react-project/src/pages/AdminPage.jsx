@@ -6,9 +6,10 @@ import axios from '../axios';
 const AdminPage = () => {
   const navigate = useNavigate(); // 페이지 이동을 위한 네비게이트 함수
   const [users, setUsers] = useState([]); // 사용자 데이터를 담을 상태 변수
-  const [accidents, setAccidents] = useState({});
+  const [accidents, setAccidents] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null); // 선택된 사용자 정보를 담을 상태 변수
   const [modalOpen, setModalOpen] = useState(false); // 모달 창이 열려있는지를 나타내는 상태 변수
+
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -25,15 +26,27 @@ const AdminPage = () => {
   //   conn.query("select id from accidents where id=?", ['asdf'], (err, rows)=>{
   //     console.log('rows', rows);
   // })
-
-
-
     fetchUsers();
   }, []);
 
   // 모달을 열고 선택된 사용자 정보를 설정
-  const openModal = (user) => {
+  const openModal = async (user) => {
     setSelectedUser(user);
+    // showAccident
+
+    await axios.post('/user/showAccident', {userId : user.member_id})
+    .then((res)=>{
+      if (res.data.result === "success"){
+        // console.log(res.data.rows);
+        setAccidents(res.data.rows);
+        console.log(accidents);
+      }
+    })
+    .catch((error)=>{
+      console.log(error);
+    });
+
+
     setModalOpen(true);
   };
 

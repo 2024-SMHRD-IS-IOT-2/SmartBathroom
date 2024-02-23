@@ -205,7 +205,7 @@ router.post("/showAccident", (req, res) => {
       console.log("err:", err);
       console.log(rows);
       res.json({ result: "fail" });
-      console.log("user.js 오류발생");
+      console.log("user.js showAccident 오류발생");
     }
   });
 });

@@ -131,7 +131,7 @@ const JoinPage = () => {
           <label htmlFor="guardianNumber">보호자번호</label>
           <input type="text" id="guardianNumber" ref={guardianNumberRef} placeholder='000-0000-0000' />
         </div>
-        <button type="submit">회원가입</button>
+        <button type="submit">Sign</button>
       </form>
     </div>
   );

@@ -113,6 +113,7 @@ router.post("/handleModify", (req, res) => {
     weight,
     guardianName,
     guardianNumber,
+
     userId,
   } = req.body;
   const sql = `UPDATE members
@@ -197,5 +198,88 @@ router.get("/sensorCommand", (req, res) => {
   console.log("sending data to arduino");
   res.send("Sending from combined serverNode");
 });
+
+
+
+
+//////////////////이 이하는 작업중 내지 더미////////////
+
+//로그아웃 기능
+router.get("/signOut", (req, res) => {
+  req.session.destroy();
+  res.redirect("/home"); //세션 다 삭제되었으므로 redirect 명령어가 잘 작동됨
+});
+
+//회원정보 기능
+router.get("/showMember", (req, res) => {
+  console.log("showMember data", req.query);
+  //if (req.query.userId !== "admin") {
+  if (userId !== "admin") {
+    //관리자 아닐 경우 = 특정 회원만
+    const sql = `select * from members
+          where member_id =?`;
+    //conn.query(sql, [req.query.userId], (err, rows) => {
+    conn.query(sql, ["1234"], (err, rows) => {
+      console.log("err", err);
+      console.log("rows", rows);
+      res.json({ result: rows });
+    });
+  } else {
+    //관리자 = 전체회원 검색
+    const sql = `select * from members where member_id != "admin"`;
+    conn.query(sql, (err, rows) => {
+      console.log("err", err);
+      console.log("rows", rows);
+      res.json({ result: rows });
+    });
+  }
+});
+
+// 탈퇴 라우터
+// DB연동 추가
+//회원탈퇴 기능
+router.post("/handleDelete", (req, res) => {
+  console.log("delete data", req.body);
+  const { userId, userPw } = req.body;
+  const sql = `delete from members where member_id=? and member_pw=?`;
+  conn.query(sql, [userId, userPw], (err, rows) => {
+    console.log("rows", rows);
+    if (rows.affectedRows > 0) {
+      res.redirect("/");
+    } else {
+      res.send(`<script>
+            alert('존재하지 않는 회원정보입니다.');
+            location.href='/delete';
+            </script>`);
+    }
+  });
+});
+
+// 차트 데이터 조회 라우터
+// DB 연동 코드 추가
+
+// 차트 UI페이지 차트 유형
+// 유형 ,저장 및 공유
+// DB 연동 코드 추가
+
+// router.post('/select', (req, res) => {
+// // 회원 정보 리스트
+//     // DB 연동 코드 추가
+//         // => 더미 데이터
+//     let rows = [
+//         { id: 'test1', name: '유저 1' },
+//         { id: 'test2', name: '유저 2' },
+//         { id: 'test3', name: '유저 3' },
+//         { id: 'test4', name: '유저 4' },
+//         { id: 'test5', name: '유저 5' },
+//         { id: 'test6', name: '유저 6' },
+//         { id: 'test7', name: '유저 7' },
+//         { id: 'test8', name: '유저 8' },
+//         { id: 'test9', name: '유저 9' },
+//         { id: 'test10', name: '유저 10' }
+//     ];
+
+//     res.json({ rows: rows });
+// });
 
 module.exports = router;

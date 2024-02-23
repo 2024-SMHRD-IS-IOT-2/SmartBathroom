@@ -1,41 +1,112 @@
-import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom'; // useNavigate와 useParams 훅 사용
+import React, { useRef } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import axios from '../axios';
 
 const ChangeUiPage = () => {
-  const navigate = useNavigate(); // 페이지 이동을 위한 네비게이트 함수
-  const { userId } = useParams(); // URL 파라미터에서 userId 추출
-  const [name, setName] = useState(''); // 이름 상태
-  const [userPw, setuserPw] = useState(''); // 이메일 상태
 
-  // 정보 수정 폼 제출 핸들러
-  const handleSubmit = (e) => {
-    e.preventDefault(); // 폼 제출 시 페이지 리로드 방지
-    console.log(`UserID: ${userId}, Name: ${name}, userPw: ${userPw}`); // 콘솔에 수정된 사용자 정보 출력
-    // 여기서 백엔드로 정보 수정 요청을 보내는 로직을 구현할 수 있습니다.
-    navigate('/user'); // 정보 수정 후 사용자 페이지로 이동
+  const data = useLocation();
+  console.log(data.state);
+
+  const navigate = useNavigate();
+  // const [sessionData, setSessionData] = useState({}); // session 데이터 상태
+
+  const userIdRef = useRef();
+  const birthDateRef = useRef();
+  const userNameRef = useRef();
+  const userPwRef = useRef();
+  const userNumberRef = useRef();
+  const addrRef = useRef();
+  const heightRef = useRef();
+  const weightRef = useRef();
+  const guardianNameRef = useRef();
+  const guardianNumberRef = useRef();
+
+  // useEffect(() => {
+  //   const fetchSessionData = async () => {
+  //     try {
+  //       const response = await axios.get('/user/getSession');
+  //       setSessionData(response.data);
+  //       console.log(response.data);
+  //     } catch (error) {
+  //       console.error('Error fetching session data:', error);
+  //     }
+  //   };
+
+  //   fetchSessionData();
+  // }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const updatedUserInfo = {
+      userId: userIdRef.current.value,
+      birthDate: birthDateRef.current.value,
+      userName: userNameRef.current.value,
+      userPw: userPwRef.current.value,
+      userNumber: userNumberRef.current.value,
+      addr: addrRef.current.value,
+      height: heightRef.current.value,
+      weight: weightRef.current.value,
+      guardianName: guardianNameRef.current.value,
+      guardianNumber: guardianNumberRef.current.value,
+    };
+
+    try {
+      const response = await axios.post('/user/handleModify', updatedUserInfo);
+      if (response.data.result === "success") {
+        alert('회원 정보가 성공적으로 수정되었습니다.');
+        navigate('/user'); // 수정 성공 후 사용자를 다른 페이지로 리디렉션
+      } else {
+        alert('회원 정보 수정에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('Error updating user info:', error);
+      alert('회원 정보 수정 중 오류가 발생했습니다.');
+    }
   };
 
   return (
-    <div>
-      <h1>정보 수정 - 사용자 {userId}</h1>
+    <div className="change-ui-page">
+      <h1>회원정보 수정</h1>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="name">새로운 이름:</label>
-          <input
-            type="text"
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)} // 이름 입력 상태 업데이트
-          />
+          <label htmlFor="userId">아이디</label>
+          <input type="text" id="userId" name="userId" defaultValue={data.state.member_id} ref={userIdRef} readOnly/>
         </div>
         <div>
-          <label htmlFor="userPw">새로운 비밀번호:</label>
-          <input
-            type="password"
-            id="userPw"
-            value={userPw}
-            onChange={(e) => setuserPw(e.target.value)} // 이메일 입력 상태 업데이트
-          />
+          <label htmlFor="birthDate">생년월일</label>
+          <input type="text" id="birthDate" name="birthDate" defaultValue={data.state.member_birthdate.slice(0,10)} ref={birthDateRef} placeholder='0000-00-00' readOnly/>
+        </div>
+        <div>
+          <label htmlFor="userName">이름</label>
+          <input type="text" id="userName" name="userName" defaultValue={data.state.member_name} ref={userNameRef} />
+        </div>
+        <div>
+          <label htmlFor="userPw">비밀번호</label>
+          <input type="password" id="userPw" name="userPw" defaultValue={data.state.member_pw} ref={userPwRef} />
+        </div>
+        <div>
+          <label htmlFor="userNumber">전화번호</label>
+          <input type="text" id="userNumber" name="userNumber" defaultValue={data.state.member_phone} ref={userNumberRef} placeholder='000-0000-0000'/>
+        </div>
+        <div>
+          <label htmlFor="addr">주소</label>
+          <input type="text" id="addr" name="addr" defaultValue={data.state.member_addr} ref={addrRef} />
+        </div>
+        <div>
+          <label htmlFor="height">키</label>
+          <input type="text" id="height" name="height" defaultValue={data.state.member_height} ref={heightRef} placeholder='cm'/>
+        </div>
+        <div>
+          <label htmlFor="weight">몸무게</label>
+          <input type="text" id="weight" name="weight" defaultValue={data.state.member_weight} ref={weightRef} placeholder='kg'/>
+        </div>
+        <div>
+          <label htmlFor="guardianName">보호자 이름</label>
+          <input type="text" id="guardianName" name="guardianName" defaultValue={data.state.guardian_name} ref={guardianNameRef} />
+        </div>
+        <div>
+          <label htmlFor="guardianNumber">보호자 번호</label>
+          <input type="text" id="guardianNumber" name="guardianNumber" defaultValue={data.state.guardian_phone} ref={guardianNumberRef} placeholder='000-0000-0000'/>
         </div>
         <button type="submit">수정하기</button>
       </form>

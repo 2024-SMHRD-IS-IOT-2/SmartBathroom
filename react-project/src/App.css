@@ -25,8 +25,11 @@ form {
     font-family: 'JalnanGothic', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     background-color: #ffffff;
     padding: 40px;
+    padding: 40px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 500px;
+    max-width: 90%;
     width: 500px;
     max-width: 90%;
 }
@@ -44,10 +47,13 @@ input[type="date"] {
     width: 100%;
     padding: 15px;
     margin: 10px 0;
+    padding: 15px;
+    margin: 10px 0;
     display: inline-block;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+    font-size: 16px; /* 변경된 부분 */
     font-size: 16px; /* 변경된 부분 */
 }
 
@@ -55,7 +61,9 @@ input[type="date"] {
 label {
     display: block;
     margin-bottom: 10px; /* 변경된 부분 */
+    margin-bottom: 10px; /* 변경된 부분 */
     color: #333;
+    font-size: 18px; /* 변경된 부분 */
     font-size: 18px; /* 변경된 부분 */
 }
 

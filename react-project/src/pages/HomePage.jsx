@@ -30,8 +30,8 @@ function HomePage() {
         height="500"
         src="https://www.youtube.com/embed/VIDEO_ID" // 영상 링크 -추가로 수정해야함
         title="시연 영상"
-        frameBorder="0"
-        allowFullScreen
+        frameborder="0"
+        allowfullscreen
         style={{ maxWidth: '100%', marginTop: '20px' }} // 화면 크기에 따라 영상 크기 조정 
       ></iframe>
 

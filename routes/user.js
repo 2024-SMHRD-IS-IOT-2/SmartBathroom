@@ -7,9 +7,8 @@ const conn = require("../config/database");
 // const sleep_lightening = 50;
 
 // 회원가입 라우터
-
-router.post("/handleJoin", (req, res) => {
-  console.log("회원가입 요청...", req.body);
+router.post('/handleJoin', (req, res) => {
+  console.log('user.js 회원가입 요청...', req.body);
   const {
     userId,
     userPw,
@@ -64,7 +63,6 @@ router.post("/handleJoin", (req, res) => {
 });
 
 // 로그인 라우터
-
 router.post("/handleLogin", (req, res) => {
   console.log("user.js 로그인 요청", req.body);
   const { userId, userPw } = req.body;
@@ -116,10 +114,7 @@ router.post("/handleModify", (req, res) => {
     weight,
     guardianName,
     guardianNumber,
-    userId,
-    selectedId,
-    userDate,
-    userName
+    userId
   } = req.body;
   //일반 회원
   if (!selectedId) {
@@ -132,9 +127,6 @@ router.post("/handleModify", (req, res) => {
     conn.query(
       sql,
       [
-        userId,
-        userDate,
-        userName,
         userPw,
         userNumber,
         addr,
@@ -142,6 +134,7 @@ router.post("/handleModify", (req, res) => {
         weight,
         guardianName,
         guardianNumber,
+        userId
       ],
       (err, result) => {
         console.log(result);

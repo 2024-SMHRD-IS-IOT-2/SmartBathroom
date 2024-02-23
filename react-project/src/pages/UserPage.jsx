@@ -8,19 +8,23 @@ const UserPage = () => {
   const [sleepLightening, setSleepLightening] = useState(50);
   const [sessionData, setSessionData] = useState({}); // session 데이터 상태
 
-  useEffect(() => {
-    const fetchSessionData = async () => {
+
+  useEffect( () =>{
+    const getLoginInfo = async ()=>{
       try {
-        const response = await axios.get('/user/getSession');
-        setSessionData(response.data);
-        console.log(response.data);
+        await axios.get('/user/getSession')
+        .then((res)=>{
+          setSessionData(res.data);
+          console.log(res.data);
+        })
+        
       } catch (error) {
         console.error('Error fetching session data:', error);
       }
-    };
+    }
+    getLoginInfo();
+  },[])
 
-    fetchSessionData();
-  }, []);
 
   const goToChartPage = () => {
     navigate('/chart');

@@ -20,7 +20,7 @@ function App() {
         <Route path="/user" element={<UserPage />} /> // 사용자 페이지 경로
         <Route path="/admin" element={<AdminPage />} /> // 관리자 페이지 경로
         <Route path="/chart" element={<ChartPage />} /> // 차트 페이지 경로
-        <Route path="/changeui" element={<ChangeUiPage />} /> // 정보 변경 페이지 경로
+        <Route path="/changeui" element={<ChangeUiPage  />} /> // 정보 변경 페이지 경로
       </Routes>
 
   );

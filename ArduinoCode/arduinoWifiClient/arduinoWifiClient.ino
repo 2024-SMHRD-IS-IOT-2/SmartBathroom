@@ -1,28 +1,37 @@
 #include <WiFi.h>
+#include "DHT.h"
+
+
+#define DHTPIN 18
+#define DHTTYPE DHT22
+#define METHPINA0 34
+#define VIBRATION 36
+#define NH3 35
+
+DHT dht(DHTPIN, DHTTYPE);
 
 const char* ssid = "SMHRD_강의실C";
 const char* password = "ccccc33333";
-const char* serverAddress = "172.30.1.46"; // IP address of your Node.js server
+const char* serverAddress = "172.30.1.45"; // IP address of your Node.js server
 const int serverPort = 3001; // Port of your Node.js server
+const char* userId = "asdf";
 
 WiFiClient wifiClient;
 
 void setup() {
   Serial.begin(115200);
   connectToWiFi();
+  dht.begin();
+  pinMode(METHPINA0, INPUT);
+  pinMode(NH3, INPUT);
+
 }
 
 void loop() {
   if (WiFi.status() == WL_CONNECTED) {
-    // Read sensor data
-    int sensorValue1 = 123;
-    int sensorValue2 = 333;
 
     // Send sensor data to server
-    sendDataToServer(sensorValue1, sensorValue2);
-
-    // Check for commands from server
-    receiveCommandsFromServer();
+    sendDataToServer();
 
     delay(10000); // Adjust delay as needed
   }
@@ -38,17 +47,31 @@ void connectToWiFi() {
   Serial.println("WiFi connected");
 }
 
-void sendDataToServer(int sensorValue1, int sensorValue2) {
+//read sensor data, make json string.
+void sendDataToServer() {
   String url = "/user/sensorData"; // Adjust the endpoint as needed
-  String data = "sensor1=" + String(sensorValue1) + "&sensor2=" + String(sensorValue2);
+
+
+  float h = dht.readHumidity();
+  float t = dht.readTemperature();
+  int nh3 = analogRead(NH3);
+  float meth = analogRead(METHPINA0);
+  bool btnEmerg = btnEmerg;
+  int falldown = analogRead(VIBRATION);
+
+  String data = "member_id=" + String(userId) + 
+                "&humidity=" + String(h) + 
+                "&temp=" + String(t) +
+                "&nh3=" + String(nh3) +
+                "&meth=" + String(meth) +
+                "&btnEmerg=" + String(btnEmerg) +
+                "&falldown=" + String(falldown);
   sendRequest(url, data);
 }
 
-void receiveCommandsFromServer() {
-  String url = "/user/sensorCommand"; // Adjust the endpoint as needed
-  sendRequest(url, "");
-}
 
+
+//send get request to node server. with sensor data.
 void sendRequest(String url, String data) {
   if (wifiClient.connect(serverAddress, serverPort)) {
     Serial.println("Connected to server");

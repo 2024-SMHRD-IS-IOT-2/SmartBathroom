@@ -7,8 +7,8 @@ const conn = require("../config/database");
 // const sleep_lightening = 50;
 
 // 회원가입 라우터
-router.post('/handleJoin', (req, res) => {
-  console.log('user.js 회원가입 요청...', req.body);
+router.post("/handleJoin", (req, res) => {
+  console.log("user.js 회원가입 요청...", req.body);
   const {
     userId,
     userPw,
@@ -19,7 +19,7 @@ router.post('/handleJoin', (req, res) => {
     height,
     weight,
     guardianName,
-    guardianNumber
+    guardianNumber,
   } = req.body;
   let birthDate2 = birthDate.replace(/\//g, "-");
   const sql = `select member_id from members where member_id=?`;
@@ -46,7 +46,7 @@ router.post('/handleJoin', (req, res) => {
           height,
           weight,
           guardianName,
-          guardianNumber
+          guardianNumber,
         ],
         (err, rows) => {
           if (rows) {
@@ -74,8 +74,8 @@ router.post("/handleLogin", (req, res) => {
     // console.log("rows", rows);
     if (rows.length > 0) {
       // members 테이블에 로그인 정보가 있을 경우
-      console.log("user.js 로그인 성공",rows[0]);
-      
+      console.log("user.js 로그인 성공", rows[0]);
+
       // session 에 저장.
       req.session.loginInfo = rows[0];
 
@@ -96,12 +96,11 @@ router.post("/handleLogin", (req, res) => {
   });
 });
 
-// 세션 데이터 
-router.get('/getSession', (req, res)=>{
+// 세션 데이터
+router.get("/getSession", (req, res) => {
   console.log("user.js : session data 내보냄.");
   res.json(req.session.loginInfo);
-})
-
+});
 
 // 개인정보 수정(ChangeUi)
 router.post("/handleModify", (req, res) => {
@@ -114,62 +113,41 @@ router.post("/handleModify", (req, res) => {
     weight,
     guardianName,
     guardianNumber,
+<<<<<<< HEAD
     userId
+=======
+    userId,
+>>>>>>> 3e6a105d969e8f56454741170be0822e993beb46
   } = req.body;
-  //일반 회원
-  if (!selectedId) {
-    
-    const sql = `UPDATE members
+  const sql = `UPDATE members
                  SET member_pw = ?, member_phone = ?, member_addr = ?,
                      member_height = ?, member_weight = ?, guardian_name = ?, 
                      guardian_phone = ?
                  WHERE member_id = ?`;
-    conn.query(
-      sql,
-      [
-        userPw,
-        userNumber,
-        addr,
-        height,
-        weight,
-        guardianName,
-        guardianNumber,
-        userId
-      ],
-      (err, result) => {
-        console.log(result);
-        if (result.changedRows > 0) {
-          res.json({ result: "success" });
-          console.log("user.js 회원정보 수정 완료 일반회원");
-        } else {
-          console.log("err:", err);
-          res.json({ result: "fail" });
-          console.log("user.js 회원정보 수정 실패 일반회원");
-        }
+  conn.query(
+    sql,
+    [
+      userPw,
+      userNumber,
+      addr,
+      height,
+      weight,
+      guardianName,
+      guardianNumber,
+      userId,
+    ],
+    (err, result) => {
+      console.log(result);
+      if (result.changedRows > 0) {
+        res.json({ result: "success" });
+        console.log("user.js 회원정보 수정 완료");
+      } else {
+        console.log("err:", err);
+        res.json({ result: "fail" });
+        console.log("user.js 회원정보 수정 실패");
       }
-    );
-    //관리자
-  } else {
-    const sql = `UPDATE members
-                 SET member_pw = ?, member_phone = ?, member_addr = ?,
-                     member_height = ?, member_weight = ?, guardian_name = ?, 
-                     guardian_phone = ? where member_id=?`;
-    conn.query(
-      sql,
-      [userPw, userNumber, addr, height, weight, guardianName, guardianNumber,selectedId],
-      (err, result) => {
-        console.log(result);
-        if (result.changedRows > 0) {
-          res.json({ result: "success" });
-          console.log("user.js 회원정보 수정 완료 관리자");
-        } else {
-          console.log("err:", err);
-          res.json({ result: "fail" });
-          console.log("user.js 회원정보 수정 실패 관리자");
-        }
-      }
-    );
-  }
+    }
+  );
 });
 
 //관리자 페이지 : 열람기능
@@ -191,33 +169,37 @@ router.post("/showList", (req, res) => {
   });
 });
 
+//로그아웃 기능
+router.get("/handleLogout", (req, res) => {
+  req.session.destroy();
+  res.json({ result: "success" });
+});
 
 // 아두이노 데이터 받기 skeleton code
 /*
 할 것 : db로 데이터 저장. session 에서 회원 id 받아서 저장.
 
 */
-router.get('/sensorData', (req, res) => {
-
+router.get("/sensorData", (req, res) => {
   console.log("receiving data");
   const sensor1Value = req.query.sensor1;
   const sensor2Value = req.query.sensor2;
-  console.log('Received sensor data from Arduino:');
-  console.log('Sensor 1:', sensor1Value);
-  console.log('Sensor 2:', sensor2Value);
+  console.log("Received sensor data from Arduino:");
+  console.log("Sensor 1:", sensor1Value);
+  console.log("Sensor 2:", sensor2Value);
 
   // 받아서 저장할 데이터
 
   // Send response to Arduino if needed
-  res.send('Data received successfully');
+  res.send("Data received successfully");
 });
 
 // 아두이노로 명령 보내기 skeleton code
 // 나중에 확인해보고 필요없으면 sensorData 반환값으로 처리해도 됨.
-router.get('/sensorCommand', (req, res) => {
+router.get("/sensorCommand", (req, res) => {
   // Send commands to Arduino if needed
   console.log("sending data to arduino");
-  res.send('Sending from combined serverNode');
+  res.send("Sending from combined serverNode");
 });
 
 

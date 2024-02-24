@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import img from '../mideo/siout.png'; // 이미지를 임포트합니다.
-import video from '../mideo/video.mp4';
+import img from '../media/siout.png'; // 이미지를 임포트합니다.
+import video from '../media/video.mp4';
 
 function HomePage() {
   const navigate = useNavigate();

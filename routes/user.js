@@ -172,19 +172,15 @@ router.post("/handleSleep", (req, res) => {
 
 //관리자 페이지 : 열람기능
 router.post("/showList", (req, res) => {
-  // console.log("showList", req.body);
   const sql = `Select *
                  from members where member_id!='admin'`;
   conn.query(sql, (err, rows) => {
-    console.log(rows);
     if (rows.length > 0) {
-      console.log(rows);
       res.json({ rows: rows, result: "success" });
       console.log("user.js 관리자가 열람할 회원정보 보냈습니다");
     } else {
-      console.log("err:", err);
+      console.log("user.js showlist err :", err);
       res.json({ result: "fail" });
-      console.log("user.js 오류발생");
     }
   });
 });
@@ -193,8 +189,6 @@ router.post("/showList", (req, res) => {
 router.post("/updateAccidentStatus", (req, res)=>{
   const sql = `select distinct member_id from accidents where acc_status = "Y"`;
   conn.query(sql, (err,rows)=>{
-    // array format
-    // [ { member_id: '12345' }, { member_id: 'q1q2' } ]
     res.json({result: "success", rows : rows});
   })
 })
@@ -205,16 +199,36 @@ router.post("/showAccident", (req, res) => {
   const sql = `select * from accidents where member_id=?`;
   conn.query(sql, [userId], (err, rows) => {
     if (rows.length > 0) {
-      console.log(rows);
+      // console.log(rows);
       res.json({ rows: rows, result: "success" });
       console.log("user.js 관리자가 열람할 사고 정보 보냈습니다.");
     } else {
-      console.log("err:", err);
-      res.json({ result: "fail" });
+      res.json({ result: "none" });
       console.log("user.js 사고이력 없음");
     }
   });
 });
+
+//사고 정보 완료처리
+router.post("/updateAccident", (req,res)=>{
+  const {acc_idx, acc_status, acc_info} = req.body;
+  console.log(`pdateAccident ${acc_idx}, ${acc_info}, ${acc_status}`);
+
+  const sql = `update accidents set acc_info=?, acc_status=? where acc_idx=?`
+
+  conn.query(sql, [acc_info, acc_status, acc_idx], (err, result) =>{
+    console.log(result);
+    if (result.changedRows > 0) {
+      res.json({ result: "success" });
+      console.log("user.js 사고정보 수정 완료", result.changedRows);
+    } else {
+      console.log("err:", err);
+      res.json({ result: "fail" });
+      console.log("user.js 사고정보 수정 실패");
+    }
+  })
+
+})
 
 
 // 아두이노 데이터 받기 skeleton code

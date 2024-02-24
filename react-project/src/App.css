@@ -190,5 +190,16 @@ ul {
 
 }
 
+.admin-modal-btn-edit {
+    color: black;
+    margin: 10px;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+
+
 
 /* UserPage */

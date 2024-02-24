@@ -12,8 +12,6 @@ const AdminPage = () => {
   const [selectedUser, setSelectedUser] = useState(null); // 선택된 사용자 정보를 담을 상태 변수
   const [modalOpen, setModalOpen] = useState(false); // 모달 창이 열려있는지를 나타내는 상태 변수
   const [isEditing, setIsEditing] = useState({ editing: false, acc_idx: "" }); // info 텍스트 필드 수정여부
-  // const [editedInfo, setEditedInfo] = useState(""); // info 수정텍스트
-  
   const editInfoRef = useRef(); // info 텍스트 ref
 
   // 회원 리스트 렌더링
@@ -90,17 +88,6 @@ const AdminPage = () => {
     navigate(`/changeui`, { state: { data: selectedUser, from: "admin" } });
   };
 
-  // 로그아웃 처리
-  const logout = async () => {
-    await axios.post('user/handleLogout')
-      .then((res) => {
-        if (res.data.result === 'success') {
-          alert("로그아웃됨");
-          navigate('/home');
-        }
-      });
-  };
-
   // 사고 처리 완료버튼.
   const updateAccident = (item) => {
 
@@ -155,10 +142,6 @@ const AdminPage = () => {
   return (
     <div className={"admin-container"}>
       <h1 className={"admin-title"}>관리자 UI</h1>
-      <div className={"admin-area-btn"}>
-        <button className={"admin-btn-main"} onClick={() => navigate('/home')} >메인화면</button>
-        <button className={"admin-btn-logout"} onClick={() => logout()}>로그아웃</button>
-      </div>
 
       <div className={"admin-area-list"}>
         {users.map((user) => (
@@ -228,7 +211,7 @@ const AdminPage = () => {
                       </div>
                       <div style={{ flex: "1" }}>
                         {accident.acc_status === "Y" && 
-                        (<img src={imgCheck} style={{width:"30px", height:"30px"}} onClick={updateAccident} alt='해결' />)}
+                        (<img className="admin-modal-btn-edit" src={imgCheck} style={{width:"30px", height:"30px"}} onClick={()=>{updateAccident(accident)}} alt='해결' />)}
                       </div>
                     </div>
 

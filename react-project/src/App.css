@@ -14,7 +14,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 150vh;
+    height: 100%;
     padding: 20px;
     margin: 0;
 }
@@ -99,6 +99,38 @@ ul {
 }
 
 
+/* TopMenu */
+.topmenu-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    height: 50px;
+    background-color: rgb(168, 221, 205);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 0 50px;
+    
+}
+
+.topmenu-title {
+    flex: 1;
+    margin-left: 100px;
+    align-items: center;
+    font-size: 25px;
+
+}
+
+.topmenu-btn {
+    
+    width: 100px;
+    padding: 5px 5px;
+    font-size: 16px;
+    margin-right: 30px;
+}
+
 /* AdminPage */
 .admin-container {
     display: flex;
@@ -146,6 +178,7 @@ ul {
     width: 30%;
     box-sizing: border-box;
 }
+
 .admin-modal {
     position: fixed;
     z-index: 999;
@@ -155,6 +188,7 @@ ul {
     right: 0;
     bottom: 0;
 }
+
 .admin-modal-content {
     background-color: #fff;
     padding: 20px;
@@ -166,15 +200,18 @@ ul {
     display: flex;
     max-height: 80vh;
 }
+
 .admin-modal-left {
     width: 300px;
     margin-right: 20px;
 }
+
 .admin-modal-right {
     flex: 1;
     max-height: 100%;
     overflow-y: auto;
 }
+
 .admin-modal-close {
     cursor: pointer;
     position: absolute;
@@ -195,11 +232,9 @@ ul {
     margin: 10px;
     align-items: center;
     justify-content: center;
-    font-weight: bold;
     font-size: 20px;
+    cursor: pointer;
 }
-
-
 
 
 /* UserPage */

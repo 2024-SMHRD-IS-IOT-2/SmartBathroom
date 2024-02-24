@@ -1,29 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../axios';
+import { UserContext } from '../contexts/UserContext';
 
 const UserPage = () => {
   const navigate = useNavigate();
   const [sleepTime, setSleepTime] = useState(8);
   const [sleepLightening, setSleepLightening] = useState(50);
-  const [sessionData, setSessionData] = useState({}); // session 데이터 상태
 
-
-  useEffect( () =>{
-    const getLoginInfo = async ()=>{
-      try {
-        await axios.get('/user/getSession')
-        .then((res)=>{
-          setSessionData(res.data);
-          console.log(res.data);
-        })
-        
-      } catch (error) {
-        console.error('Error fetching session data:', error);
-      }
-    }
-    getLoginInfo();
-  },[])
+  const { loginData, setLoginData } = useContext(UserContext); // context 에 로그인 저장돼있음
 
 
   const goToChartPage = () => {
@@ -31,17 +16,7 @@ const UserPage = () => {
   };
 
   const goToChangeUiPage = () => {
-    navigate('/changeui', {state : {data : sessionData, from : "user"}});
-  };
-
-  const logout = async () => {
-    await axios.post('user/handleLogout')
-    .then ((res)=>{
-      if (res.data.result === 'success'){
-        alert("로그아웃됨");
-        navigate('/home');
-      }
-    });
+    navigate('/changeui', {state : {data : loginData, from : "user"}});
   };
 
   const saveSettings = () => {
@@ -51,15 +26,15 @@ const UserPage = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh', padding: '20px', position: 'relative' }}>
-      <div style={{ position: 'fixed', top: '10px', right: '20px', zIndex: '999' }}>
+      <div style={{ position: 'relative', }}>
         <button onClick={goToChartPage} style={{ fontSize: '1em', marginRight: '10px' }}>차트</button>
         <button onClick={goToChangeUiPage} style={{ fontSize: '1em', marginRight: '10px' }}>회원정보 변경</button>
-        <button onClick={logout} style={{ fontSize: '1em' }}>로그아웃</button>
+
       </div>
-      <h1>{sessionData.member_id}님의 정보</h1>
+      <h1>{loginData.member_id}님의 정보</h1>
       <div style={{ textAlign: 'center', width: '100%' }}>
-        <p style={{ fontSize: '1.5em', marginBottom: '10px' }}>이름:{sessionData.member_name}</p>
-        <p style={{ fontSize: '1.5em', marginBottom: '10px' }}>보호자 이름: {sessionData.guardian_name}</p>
+        <p style={{ fontSize: '1.5em', marginBottom: '10px' }}>이름:{loginData.member_name}</p>
+        <p style={{ fontSize: '1.5em', marginBottom: '10px' }}>보호자 이름: {loginData.guardian_name}</p>
         <p style={{ fontSize: '1.5em', marginBottom: '10px' }}>수면 시간: {sleepTime.sleep_time} 시간</p>
         <input type="range" min="4" max="12" value={sleepTime} onChange={(e) => setSleepTime(e.target.value)} style={{ width: '80%', marginBottom: '20px' }} />
         <p style={{ fontSize: '1.5em', marginBottom: '10px' }}>조명 밝기: {sleepLightening.sleep_lightening}%</p>

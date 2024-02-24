@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // 페이지 이동을 위해 useNavigate 훅을 사용합니다.
 import axios from '../axios'; // axios를 임포트합니다.
+import { UserContext } from '../contexts/UserContext';
 
 const LoginPage = () => {
   const [userId, setUserId] = useState(''); // 아이디 상태
   const [userPw, setUserPw] = useState(''); // 비밀번호 상태
   const navigate = useNavigate(); // 페이지 이동을 위한 네비게이트 함수
+  const { setIsLoggedIn, setLoginData } = useContext(UserContext);
 
   // 로그인 폼 제출 핸들러
   const handleSubmit = async (e) => {
@@ -22,10 +24,14 @@ const LoginPage = () => {
             if (res.data.result === "success"){
               // 로그인에 성공했을 때
               alert('회원 로그인에 성공했습니다.');
+              setLoginData(res.data.data);
+              setIsLoggedIn(true);
               navigate('/user'); // 유저 페이지로 이동
 
             } else if (res.data.result === "admin") {
               alert('관리자 로그인에 성공했습니다.');
+              setLoginData(res.data.data);
+              setIsLoggedIn(true);
               navigate('/admin'); // 유저 페이지로 이동
             }
             else {

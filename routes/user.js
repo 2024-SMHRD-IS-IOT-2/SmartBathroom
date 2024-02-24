@@ -82,11 +82,11 @@ router.post("/handleLogin", (req, res) => {
       // 관리자 로그인
       if (userId === "admin") {
         console.log("admin입니다");
-        res.json({ result: "admin" });
+        res.json({ result: "admin" , data : rows[0]});
       } else {
         // 회원 로그인
         console.log("회원입니다");
-        res.json({ result: "success" });
+        res.json({ result: "success" , data : rows[0] });
       }
     } else {
       // 로그인 실패

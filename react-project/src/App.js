@@ -1,5 +1,5 @@
 import './App.css';
-import React from 'react';
+import React, { useState } from 'react';
 import { Routes, Route } from 'react-router-dom'; // BrowserRouter as Router 삭제
 import HomePage from './pages/HomePage'; // 홈 페이지 컴포넌트 임포트
 import LoginPage from './pages/LoginPage'; // 로그인 페이지 컴포넌트 임포트
@@ -8,21 +8,35 @@ import UserPage from './pages/UserPage'; // 사용자 페이지 컴포넌트 임
 import AdminPage from './pages/AdminPage'; // 관리자 페이지 컴포넌트 임포트
 import ChartPage from './pages/ChartPage'; // 차트 페이지 컴포넌트 임포트
 import ChangeUiPage from './pages/ChangeUiPage'; // 정보 변경 페이지 컴포넌트 임포트
+import TopMenu from './components/TopMenu';
+import { UserContext } from './contexts/UserContext';
 
 
 function App() {
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loginData, setLoginData] = useState(null);
+
+
   return (
+    <div>
 
-      <Routes>
-        <Route path="/home" element={<HomePage />} /> // 홈 페이지 경로
-        <Route path="/login" element={<LoginPage />} /> // 로그인 페이지 경로
-        <Route path="/join" element={<JoinPage />} /> // 회원가입 페이지 경로
-        <Route path="/user" element={<UserPage />} /> // 사용자 페이지 경로
-        <Route path="/admin" element={<AdminPage />} /> // 관리자 페이지 경로
-        <Route path="/chart" element={<ChartPage />} /> // 차트 페이지 경로
-        <Route path="/changeui" element={<ChangeUiPage  />} /> // 정보 변경 페이지 경로
-      </Routes>
+    <UserContext.Provider value = {{isLoggedIn, setIsLoggedIn, loginData, setLoginData}}>
+      <TopMenu />
+      <div style={{paddingTop: "40px"}}>
+        <Routes>
+          <Route path="/" element={<HomePage />} /> 
+          <Route path="/login" element={<LoginPage />} /> 
+          <Route path="/join" element={<JoinPage />} /> 
+          <Route path="/user" element={<UserPage />} /> 
+          <Route path="/admin" element={<AdminPage />} /> 
+          <Route path="/chart" element={<ChartPage />} /> 
+          <Route path="/changeui" element={<ChangeUiPage />} />
+        </Routes>
+      </div>
+    </UserContext.Provider>
 
+    </div>
   );
 }
 

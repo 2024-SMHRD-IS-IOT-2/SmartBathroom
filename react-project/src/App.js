@@ -14,14 +14,14 @@ import { UserContext } from './contexts/UserContext';
 
 function App() {
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [loginData, setLoginData] = useState(null);
+  const [isLoggedin, setIsLoggedin] = useState(false);
+  const [loginData, setLoginData] = useState({});
 
 
   return (
     <div>
 
-    <UserContext.Provider value = {{isLoggedIn, setIsLoggedIn, loginData, setLoginData}}>
+    <UserContext.Provider value = {{isLoggedin, setIsLoggedin, loginData, setLoginData}}>
       <TopMenu />
       <div style={{paddingTop: "40px"}}>
         <Routes>

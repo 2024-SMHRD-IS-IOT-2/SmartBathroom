@@ -6,7 +6,7 @@ import axios from '../axios';
 const TopMenu = () => {
     const navigate = useNavigate();
 
-    const { isLoggedIn, setIsLoggedIn, loginData, setLoginData } = useContext(UserContext);
+    const { isLoggedin, setIsLoggedin, loginData } = useContext(UserContext);
 
 
     //홈 화면으로
@@ -18,20 +18,16 @@ const TopMenu = () => {
     const goToLogin = () => {
         navigate('/login');
 
-        //test code
-        // setIsLoggedIn(true);
     };
 
     //로그아웃
     const logout = async () => {
-        // test code
-        // setIsLoggedIn(false);
 
         await axios.post('/user/handleLogout')
             .then((res) => {
                 if (res.data.result === "success") {
                     alert("로그아웃되셨습니다.");
-                    setIsLoggedIn(false);
+                    setIsLoggedin(false);
                     navigate('/');
                 }
             })
@@ -48,9 +44,9 @@ const TopMenu = () => {
     return (
         <div className='topmenu-container'>
             <div className='topmenu-title'>SIOT 스마트 화장실</div>
-            {isLoggedIn ?
+            {isLoggedin ?
                 (<div>
-                    {isLoggedIn && <span style={{marginRight:"30px"}}>{loginData.member_name} 님</span>}
+                    <span style={{marginRight:"30px"}}>{loginData.member_name} 님</span>
                     
                     <button className="topmenu-btn" onClick={goToMain} >메인화면</button>
                     <button className="topmenu-btn" onClick={goToHome} >홈</button>

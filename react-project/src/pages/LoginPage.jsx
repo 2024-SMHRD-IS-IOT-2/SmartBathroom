@@ -7,7 +7,7 @@ const LoginPage = () => {
   const [userId, setUserId] = useState(''); // 아이디 상태
   const [userPw, setUserPw] = useState(''); // 비밀번호 상태
   const navigate = useNavigate(); // 페이지 이동을 위한 네비게이트 함수
-  const { setIsLoggedIn, setLoginData } = useContext(UserContext);
+  const { setIsLoggedin, setLoginData } = useContext(UserContext);
 
   // 로그인 폼 제출 핸들러
   const handleSubmit = async (e) => {
@@ -25,13 +25,13 @@ const LoginPage = () => {
               // 로그인에 성공했을 때
               alert('회원 로그인에 성공했습니다.');
               setLoginData(res.data.data);
-              setIsLoggedIn(true);
+              setIsLoggedin(true);
               navigate('/user'); // 유저 페이지로 이동
 
             } else if (res.data.result === "admin") {
               alert('관리자 로그인에 성공했습니다.');
               setLoginData(res.data.data);
-              setIsLoggedIn(true);
+              setIsLoggedin(true);
               navigate('/admin'); // 유저 페이지로 이동
             }
             else {

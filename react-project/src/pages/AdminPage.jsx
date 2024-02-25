@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom'; // 페이지 이동을 위해 useNavigate 훅 사용
 import axios from '../axios';
 import imgCheck from '../media/check.png';
-
+import { UserContext } from '../contexts/UserContext';
 
 const AdminPage = () => {
   const navigate = useNavigate(); // 페이지 이동을 위한 네비게이트 함수
@@ -13,24 +13,11 @@ const AdminPage = () => {
   const [modalOpen, setModalOpen] = useState(false); // 모달 창이 열려있는지를 나타내는 상태 변수
   const [isEditing, setIsEditing] = useState({ editing: false, acc_idx: "" }); // info 텍스트 필드 수정여부
   const editInfoRef = useRef(); // info 텍스트 ref
-
-  // 회원 리스트 렌더링
-  // 회원 사고 리스트 5초마다 렌더링. 타이머 사용
-  useEffect(() => {
-    console.log("showList rendering");
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.post('/user/showList');
-        if (response.data.result === "success") {
-          setUsers(response.data.rows);
-        }
-      } catch (error) {
-        console.error('Error fetching user:', error);
-      }
-    };
+  const { isLoggedin } = useContext(UserContext); // context 에 로그인 저장돼있음
 
     // 회원 사고리스트
-    const fetchAccidentList = async () => {
+    // 현재 사고가 나있는 회원들 목록 불러옴. (색깔 변경용)
+  const refreshAccidentList = async () => {
       await axios.post('/user/updateAccidentStatus')
         .then((res) => {
           // [ { member_id: '12345' }, { member_id: 'q1q2' } ] 포맷
@@ -43,12 +30,35 @@ const AdminPage = () => {
         })
     }
 
+
+  // 회원 리스트 렌더링
+  // 회원 사고 리스트 5초마다 렌더링. 타이머 사용
+  // 첫 렌더링시, 로그인안돼있을 경우 홈 페이지로 이동.
+  useEffect(() => {
+    console.log("isLoggedin", isLoggedin);
+    if (!isLoggedin) {
+      alert("로그인해주세요");
+      navigate('/');
+    }
+
+    console.log("admin memberlist rendering");
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.post('/user/showList');
+        if (response.data.result === "success") {
+          setUsers(response.data.rows);
+        }
+      } catch (error) {
+        console.error('Error fetching user:', error);
+      }
+    };
+
     // initial rendering.
     fetchUsers();
-    fetchAccidentList();
+    refreshAccidentList();
 
     //5초마다 사고리스트 업데이트
-    const interval = setInterval(fetchAccidentList, 5000);
+    const interval = setInterval(refreshAccidentList, 5000);
     return () => clearInterval(interval);
 
   }, []);
@@ -80,6 +90,8 @@ const AdminPage = () => {
 
   // 모달을 닫음
   const closeModal = () => {
+    //회원 사고리스트 새로고침.
+    refreshAccidentList();
     setModalOpen(false);
   };
 
@@ -141,7 +153,7 @@ const AdminPage = () => {
 
   return (
     <div className={"admin-container"}>
-      <h1 className={"admin-title"}>관리자 UI</h1>
+      <h1 className={"admin-title"}>회원 목록</h1>
 
       <div className={"admin-area-list"}>
         {users.map((user) => (

@@ -8,8 +8,18 @@ const UserPage = () => {
   const [sleepTime, setSleepTime] = useState(8);
   const [sleepLightening, setSleepLightening] = useState(50);
 
-  const { loginData, setLoginData } = useContext(UserContext); // context 에 로그인 저장돼있음
+  const { isLoggedin, loginData } = useContext(UserContext); // context 에 로그인 저장돼있음
 
+  useEffect(() => {
+    console.log("isLoggedin", isLoggedin);
+    if (!isLoggedin) {
+      alert("로그인해주세요");
+      navigate('/');
+    }
+  
+
+  }, [])
+  
 
   const goToChartPage = () => {
     navigate('/chart');

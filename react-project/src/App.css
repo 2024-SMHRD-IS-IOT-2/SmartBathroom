@@ -1,10 +1,84 @@
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700&display=swap');
 
 @font-face {
+    font-family: 'Ownglyph_meetme-Rg';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2402_1@1.0/Ownglyph_meetme-Rg.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
     font-family: 'JalnanGothic';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_231029@1.1/JalnanGothic.woff') format('woff');
     font-weight: normal;
     font-style: normal;
+}
+
+.bottom-gohome-logo{
+    font-family: 'Ownglyph_meetme-Rg';
+    font-size: 30px;
+    color: #4ea2ec;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.bottom-copyx-text {
+    margin-top: 10px;
+    text-align: center;
+    margin-left: 50px;
+}
+
+.form-check-btn {
+    width: 180px;
+    display: block;
+    margin: 0 auto;
+}
+
+.joinpage-top-text {
+    margin-top: 0px;
+    margin-bottom: 8px;
+}
+
+.gohome-logo{
+    font-family: 'Ownglyph_meetme-Rg';
+    color: #4199e6;
+    font-size: 100px;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.gohome-logo:hover {
+    color: #1a559c;
+    transform: scale(1.05);
+
+}
+
+input[type="text"]#addr {
+    flex-grow: 1;
+    /* 사용 가능한 공간을 모두 차지하도록 설정 */
+    margin-bottom: 0%;
+}
+
+/* 버튼에 대한 스타일 */
+button.addrBtn {
+    padding: 5px;
+    margin-top: 0%;
+    background-color: #808080;
+    /* 버튼의 배경 색상을 회색으로 설정 */
+    border: none;
+    /* 테두리 제거 */
+    color: white;
+    /* 글자 색상을 흰색으로 설정 */
+    cursor: pointer;
+    /* 마우스 오버 시 커서 모양 변경 */
+}
+
+/* 버튼에 마우스를 올렸을 때의 스타일 */
+button.addrBtn:hover {
+    background-color: #696969;
+    /* 마우스 오버 시 버튼의 배경 색상을 어둡게 변경 */
 }
 
 /* 이제 'JalnanGothic' 폰트를 원하는 곳에서 사용할 수 있습니다. 예를 들어, body 전체에 적용하려면: */
@@ -15,7 +89,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100%;
-    padding: 20px;
+    padding: 0;
     margin: 0;
 }
 
@@ -24,11 +98,8 @@ form {
     font-family: 'JalnanGothic', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     background-color: #ffffff;
     padding: 40px;
-    padding: 40px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 500px;
-    max-width: 90%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     width: 500px;
     max-width: 90%;
 }
@@ -45,52 +116,38 @@ input[type="password"],
 input[type="date"] {
     width: 100%;
     padding: 15px;
-    margin: 10px 0;
-    padding: 15px;
-    margin: 10px 0;
+    margin-bottom: 15px;
     display: inline-block;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
     font-size: 16px;
-    /* 변경된 부분 */
-    font-size: 16px;
-    /* 변경된 부분 */
 }
 
 /* 라벨 스타일 */
 label {
     display: block;
     margin-bottom: 10px;
-    /* 변경된 부분 */
-    margin-bottom: 10px;
-    /* 변경된 부분 */
     color: #333;
     font-size: 18px;
-    /* 변경된 부분 */
-    font-size: 18px;
-    /* 변경된 부분 */
 }
 
 /* 버튼 스타일 */
 button {
     font-family: 'JalnanGothic', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     width: 100%;
-    background-color: #4CAF50;
+    background-color: rgb(67, 191, 56);
     color: white;
     padding: 16px 20px;
-    /* 변경된 부분 */
     margin: 10px 0;
-    /* 변경된 부분 */
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 18px;
-    /* 변경된 부분 */
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #44db4c;
 }
 
 ul {
@@ -112,7 +169,7 @@ ul {
     justify-content: space-between;
     align-items: center;
     padding-right: 0 50px;
-    
+
 }
 
 .topmenu-title {
@@ -124,7 +181,7 @@ ul {
 }
 
 .topmenu-btn {
-    
+
     width: 100px;
     padding: 5px 5px;
     font-size: 16px;
@@ -146,6 +203,24 @@ ul {
     font-size: 1.5em;
 }
 
+.admin-area-btn {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    position: absolute;
+    top: 0;
+    right: 20px;
+}
+
+.admin-btn-main {
+    font-size: 1em;
+    margin-right: 10px;
+}
+
+.admin-btn-logout {
+    font-size: 1em;
+}
 
 .admin-area-list {
     display: flex;

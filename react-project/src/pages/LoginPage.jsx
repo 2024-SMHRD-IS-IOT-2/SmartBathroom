@@ -65,7 +65,6 @@ const LoginPage = () => {
             onChange={(e) => setUserId(e.target.value)} // 아이디 입력 상태 업데이트
           />
         </div>
-        <div style={{ color: 'red' }}>{loginError}</div>
         <div>
           <label htmlFor="userPw">비밀번호</label>
           <input
@@ -75,6 +74,7 @@ const LoginPage = () => {
             onChange={(e) => setUserPw(e.target.value)} // 비밀번호 입력 상태 업데이트
           />
         </div>
+        <div style={{ color: 'red' }}>{loginError}</div>
         <button type="submit">로그인</button>
         <button onClick={() => navigate('/join')}>회원가입</button> {/* 회원가입 페이지로 이동 */}
       </form>

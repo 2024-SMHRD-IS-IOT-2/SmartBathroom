@@ -43,18 +43,18 @@ const TopMenu = () => {
 
     return (
         <div className='topmenu-container'>
-            <div className='topmenu-title'>SIOT 스마트 화장실</div>
+            <div className='topmenu-title'>SIoT 스마트 화장실</div>
             {isLoggedin ?
                 (<div>
-                    <span style={{marginRight:"30px"}}>{loginData.member_name} 님</span>
+                    <span className='topmenu-member-id' style={{marginRight:"30px"}}>{loginData.member_name} 님</span>
                     
                     <button className="topmenu-btn" onClick={goToMain} >메인화면</button>
-                    <button className="topmenu-btn" onClick={goToHome} >홈</button>
+                    {/* <button className="topmenu-btn" onClick={goToHome} >홈</button> */}
                     <button className="topmenu-btn" onClick={logout}>로그아웃</button>
 
                 </div>) :
                 (<div>
-                    <button className="topmenu-btn" onClick={goToHome} >홈</button>
+                    {/* <button className="topmenu-btn" onClick={goToHome} >홈</button> */}
                     <button className="topmenu-btn" onClick={goToLogin}>로그인</button>
                 </div>)
             }

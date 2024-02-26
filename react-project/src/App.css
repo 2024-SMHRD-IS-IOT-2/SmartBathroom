@@ -158,32 +158,40 @@ ul {
 
 /* TopMenu */
 .topmenu-container {
+    font-family: 'Ownglyph_meetme-Rg';
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 1000;
-    height: 50px;
-    background-color: rgb(168, 221, 205);
+    height: 70px;
+    background-color: #f4f4f4bc;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding-right: 0 50px;
 
 }
+.topmenu-member-id{
+    font-size: 25px;
+    font-family: 'JalnanGothic', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    display: flex;
+    /* align-items: center; */
+    justify-content: center;
+}
 
 .topmenu-title {
     flex: 1;
     margin-left: 100px;
     align-items: center;
-    font-size: 25px;
+    font-size: 30px;
+    color: rgb(0, 0, 0);
 
 }
 
 .topmenu-btn {
-
     width: 100px;
-    padding: 5px 5px;
+    padding: 10px 10px;
     font-size: 16px;
     margin-right: 30px;
 }

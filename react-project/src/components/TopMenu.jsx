@@ -48,7 +48,7 @@ const TopMenu = () => {
                 (<div>
                     <span style={{marginRight:"30px"}}>{loginData.member_name} 님</span>
                     
-                    <button className="topmenu-btn" onClick={goToMain} >메인화면</button>
+                    {/* <button className="topmenu-btn" onClick={goToMain} >메인화면</button> */}
                     <button className="topmenu-btn" onClick={goToHome} >홈</button>
                     <button className="topmenu-btn" onClick={logout}>로그아웃</button>
 

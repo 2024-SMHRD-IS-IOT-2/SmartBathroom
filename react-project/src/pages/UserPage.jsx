@@ -16,17 +16,15 @@ const UserPage = () => {
       alert("로그인해주세요");
       navigate('/');
     }
-  
-
   }, [])
-  
+
 
   const goToChartPage = () => {
     navigate('/chart');
   };
 
   const goToChangeUiPage = () => {
-    navigate('/changeui', {state : {data : loginData, from : "user"}});
+    navigate('/changeui', { state: { data: loginData, from: "user" } });
   };
 
   const saveSettings = () => {
@@ -35,14 +33,14 @@ const UserPage = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh', padding: '20px', position: 'relative' }}>
-      <div style={{ position: 'relative', }}>
+    <div style={{ display: 'flex', alignItems: 'center', width: "90%",  height: '100vh', padding: '20px', position:"relative"}}>
+      <div style={{ position: 'relative', width :"20%" }}>
         <button onClick={goToChartPage} style={{ fontSize: '1em', marginRight: '10px' }}>차트</button>
         <button onClick={goToChangeUiPage} style={{ fontSize: '1em', marginRight: '10px' }}>회원정보 변경</button>
-
       </div>
-      <h1>{loginData.member_id}님의 정보</h1>
-      <div style={{ textAlign: 'center', width: '100%' }}>
+
+      <div style={{ textAlign: 'center', width: '50%' }}>
+        <h1>{loginData.member_id}님의 정보</h1>
         <p style={{ fontSize: '1.5em', marginBottom: '10px' }}>이름:{loginData.member_name}</p>
         <p style={{ fontSize: '1.5em', marginBottom: '10px' }}>보호자 이름: {loginData.guardian_name}</p>
         <p style={{ fontSize: '1.5em', marginBottom: '10px' }}>수면 시간: {sleepTime.sleep_time} 시간</p>
@@ -51,10 +49,11 @@ const UserPage = () => {
         <input type="range" min="0" max="100" value={sleepLightening} onChange={(e) => setSleepLightening(e.target.value)} style={{ width: '80%' }} />
         <button onClick={saveSettings} style={{ fontSize: '1em', marginTop: '20px' }}>설정 저장</button>
       </div>
-      <div style={{ width: '20%', marginTop: '20px', backgroundColor: '#f0f0f0' }}>
+      <div style={{ flex:"1", marginTop: '20px', backgroundColor: '#f0f0f0' }}>
         {/* 여기에 차트를 표시하는 컴포넌트를 추가 */}
         {<p>차트를 표시하는 공간</p>}
       </div>
+
     </div>
   );
 };

@@ -82,11 +82,11 @@ router.post("/handleLogin", (req, res) => {
       // 관리자 로그인
       if (userId === "admin") {
         console.log("admin입니다");
-        res.json({ result: "admin" , data : rows[0]});
+        res.json({ result: "admin", data: rows[0] });
       } else {
         // 회원 로그인
         console.log("회원입니다");
-        res.json({ result: "success" , data : rows[0] });
+        res.json({ result: "success", data: rows[0] });
       }
     } else {
       // 로그인 실패
@@ -103,9 +103,9 @@ router.get("/getSession", (req, res) => {
 });
 
 // 로그아웃 라우터
-router.post('/handleLogout', (req, res)=>{
+router.post('/handleLogout', (req, res) => {
   req.session.destroy();
-  res.json({result : 'success'})
+  res.json({ result: 'success' })
 });
 
 // 개인정보 수정(ChangeUi)
@@ -186,10 +186,10 @@ router.post("/showList", (req, res) => {
 });
 
 //관리자 페이지 : 현재 사고현황이 "Y" 인 유저만 반환
-router.post("/updateAccidentStatus", (req, res)=>{
+router.post("/updateAccidentStatus", (req, res) => {
   const sql = `select distinct member_id from accidents where acc_status = "Y"`;
-  conn.query(sql, (err,rows)=>{
-    res.json({result: "success", rows : rows});
+  conn.query(sql, (err, rows) => {
+    res.json({ result: "success", rows: rows });
   })
 })
 
@@ -210,13 +210,13 @@ router.post("/showAccident", (req, res) => {
 });
 
 //사고 정보 완료처리
-router.post("/updateAccident", (req,res)=>{
-  const {acc_idx, acc_status, acc_info} = req.body;
+router.post("/updateAccident", (req, res) => {
+  const { acc_idx, acc_status, acc_info } = req.body;
   console.log(`pdateAccident ${acc_idx}, ${acc_info}, ${acc_status}`);
 
   const sql = `update accidents set acc_info=?, acc_status=? where acc_idx=?`
 
-  conn.query(sql, [acc_info, acc_status, acc_idx], (err, result) =>{
+  conn.query(sql, [acc_info, acc_status, acc_idx], (err, result) => {
     console.log(result);
     if (result.changedRows > 0) {
       res.json({ result: "success" });
@@ -238,15 +238,15 @@ router.post("/updateAccident", (req,res)=>{
 */
 router.get("/sensorData", (req, res) => {
   console.log("receiving data");
-  const {humidity,temp, nh3, meth, btnEmerg, falldown, member_id} = req.query;
+  const { humidity, temp, nh3, meth, btnEmerg, falldown, member_id } = req.query;
 
   console.log("Received sensor data from Arduino:");
   console.log(req.query);
 
-  // 받은 아이디값으로 DB 저장
+  // 받은 아이디값으로 sensor DB 저장
   const sql = `insert into sensors(sensor_humid, sensor_temp, sensor_nh3, member_id) 
                 values (?,?,?,?)`;
-  conn.query( sql,[humidity, temp, nh3, member_id],
+  conn.query(sql, [humidity, temp, nh3, member_id],
     (err, rows) => {
       if (rows) {
         console.log(`user.js 센서저장 성공.  아이디: ${member_id}`);
@@ -255,37 +255,55 @@ router.get("/sensorData", (req, res) => {
       }
     }
   );
+
+  // 받은 값으로 accidents 저장
+  let accNote = "";
+  if (btnEmerg === "1") accNote = "화장실 갇힘 감지"
+  // else if (falldown === 1) accNote = "넘어짐 감지"
+  
+  console.log(accNote);
+//  || falldown === "1"  // 충격감지 나중에 포함
+  if (btnEmerg === "1"){
+    const sql2 = `insert into accidents (acc_info, acc_status, member_id) 
+    values (?,?,?)`;
+    conn.query(sql2, [accNote, "Y", member_id],
+      (err, rows) => {
+        if (rows) {
+          console.log(`user.js 사고저장 성공.  아이디: ${member_id}`);
+        } else {
+          console.log("user.js 사고저장실패", err);
+        }
+      }
+    );
+  }
+
+
+
   // 아두이노로 값 보내기.
-  const sql2 = `select sleep_time, sleep_lightening from members where member_id=(?)`;
-  conn.query(sql2, [member_id],
+  const sql3 = `select sleep_time, sleep_lightening from members where member_id=?`;
+  conn.query(sql3, [member_id],
     (err, rows) => {
       if (rows) {
         // 수면시간 계산
         let dateTime = new Date();
-        let startTime = rows[0].sleep_time.slice(0,5);
+        let startTime = rows[0].sleep_time.slice(0, 5);
         let endTime = rows[0].sleep_time.slice(6);
         let isSleepLight = false;
-        
-        startTime = parseInt(startTime.replace(":",""));
-        endTime = parseInt(endTime.replace(":",""));
+
+        startTime = parseInt(startTime.replace(":", ""));
+        endTime = parseInt(endTime.replace(":", ""));
         let curTime = dateTime.getHours() * 100 + dateTime.getMinutes();
-      
+
         if (curTime > startTime || curTime < endTime) isSleepLight = true;
-        else isSleepLight = false; 
-        
+        else isSleepLight = false;
 
         //수면등 여부 // 수면등 밝기 아두이노로 전송.
         res.send(`${isSleepLight}*${rows[0].sleep_lightening}*`);
-        
       } else {
         console.log("user.js 센서값 업데이트 실패", err);
       }
-
     }
   );
-
-  res.send('Data received successfully');
-
 });
 
 

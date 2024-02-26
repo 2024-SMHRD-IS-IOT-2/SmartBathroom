@@ -18,6 +18,9 @@ body {
     padding: 20px;
     margin: 0;
 }
+#root {
+    flex : 1;
+}
 
 /* 폼과 관련된 스타일 */
 form {

@@ -52,12 +52,10 @@
 .gohome-logo:hover {
     color: #1a559c;
     transform: scale(1.05);
-
 }
 
 input[type="text"]#addr {
     flex-grow: 1;
-    /* 사용 가능한 공간을 모두 차지하도록 설정 */
     margin-bottom: 0%;
 }
 
@@ -66,19 +64,14 @@ button.addrBtn {
     padding: 5px;
     margin-top: 0%;
     background-color: #808080;
-    /* 버튼의 배경 색상을 회색으로 설정 */
     border: none;
-    /* 테두리 제거 */
     color: white;
-    /* 글자 색상을 흰색으로 설정 */
     cursor: pointer;
-    /* 마우스 오버 시 커서 모양 변경 */
 }
 
 /* 버튼에 마우스를 올렸을 때의 스타일 */
 button.addrBtn:hover {
     background-color: #696969;
-    /* 마우스 오버 시 버튼의 배경 색상을 어둡게 변경 */
 }
 
 /* 이제 'JalnanGothic' 폰트를 원하는 곳에서 사용할 수 있습니다. 예를 들어, body 전체에 적용하려면: */
@@ -87,10 +80,14 @@ body {
     background-color: #f4f4f4;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start; /* 중앙에 몰리지 않도록 변경 */
     height: 100%;
     padding: 0;
     margin: 0;
+}
+
+#root {
+    flex : 1;
 }
 
 /* 폼과 관련된 스타일 */
@@ -284,12 +281,9 @@ ul {
     right: 10px;
 }
 
-
-
 .admin-modal-item-hl {
     border: red solid 2px;
     background-color: lightcoral;
-
 }
 
 .admin-modal-btn-edit {
@@ -301,5 +295,44 @@ ul {
     cursor: pointer;
 }
 
-
 /* UserPage */
+
+.user-container {
+    display: flex;
+    flex-direction: row; /* 가로 방향으로 요소를 배치합니다 */
+    align-items: flex-start; /* 상단에 요소를 정렬합니다 */
+    justify-content: space-between; /* 요소 사이에 동일한 공간을 배치합니다 */
+    height: 100vh;
+    padding: 20px;
+}
+
+.user-title {
+    font-family: 'JalnanGothic', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.user-content {
+    font-family: 'JalnanGothic', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 1.2em;
+    color: #555;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.user-btn {
+    font-family: 'JalnanGothic', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #ff6600;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.user-btn:hover {
+    background-color: #e55d00;
+}

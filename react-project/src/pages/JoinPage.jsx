@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../axios';
 import '../App.css';
-import BottomText from '../components/BottomText'
+import BottomText from '../components/BottomText';
 
 const JoinPage = () => {
   const navigate = useNavigate();
@@ -96,11 +96,12 @@ const JoinPage = () => {
       alert('회원가입에 실패했습니다.');
     }
   };
+
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <span className='gohome-logo' onClick={() => navigate('/')}>SIoT</span>
       <h1 className='joinpage-top-text'>회원가입</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} style={{ width: '400px' }}>
         <div>
           <label htmlFor="userId">아이디</label>
           <input type="text" id="userId" ref={userIdRef} />
@@ -153,4 +154,5 @@ const JoinPage = () => {
     </div>
   );
 };
+
 export default JoinPage;

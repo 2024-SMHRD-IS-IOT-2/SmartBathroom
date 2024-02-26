@@ -152,12 +152,12 @@ const AdminPage = () => {
 
 
   return (
-    <div className={"admin-container"}>
+    <div className={"admin-container"} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
       <h1 className={"admin-title"}>회원 목록</h1>
-
+  
       <div className={"admin-area-list"}>
         {users.map((user) => (
-
+  
           <div key={user.member_id} onClick={() => openModal(user)}
             className={"admin-list-item"}
             style={{ backgroundColor: (accidentUserId.includes(user.member_id)) ? "lightcoral" : "lightgreen" }}>
@@ -168,12 +168,12 @@ const AdminPage = () => {
           </div>
         ))}
       </div>
-
-
+  
+  
       {modalOpen && selectedUser && (
         <div className="admin-modal">
           <div className="admin-modal-content">
-            
+  
             {/* 왼쪽 :  유저정보 + 버튼 */}
             <div className="admin-modal-left">
               <span className="admin-modal-close" onClick={() => closeModal()}>×</span>
@@ -185,9 +185,9 @@ const AdminPage = () => {
               <button onClick={() => goToChangeUiPage(selectedUser.member_id)}>정보수정</button>
               <button onClick={() => closeModal()}>닫기</button>
             </div>
-
-            {/* 오른족 : 사고 이력 */}
-            <div className="admin-modal-right" >
+  
+            {/* 오른쪽 : 사고 이력 */}
+            <div className="admin-modal-right">
               <h2>사고 이력</h2>
               <ul>
                 {userAccidents.map((accident, index) => (
@@ -195,7 +195,7 @@ const AdminPage = () => {
                     <div style={{ display: "flex" }}>
                       <div style={{ width: "350px" }}>
                         <p>발생 시간: {new Date(accident.acc_time).toLocaleString()}</p>
-
+  
                         <div style={{display:"flex", justifyContent: "space-between"}}>
                           {isEditing.editing && (isEditing.acc_idx === accident.acc_idx) ?
                             (
@@ -207,8 +207,8 @@ const AdminPage = () => {
                               />
                             ) : 
                             (<p>사고 정보: {accident.acc_info}</p>)}
-
-
+  
+  
                           {isEditing.editing && (isEditing.acc_idx === accident.acc_idx) ?
                           (
                             <div style={{display:"flex", alignItems: "center"}}>
@@ -217,18 +217,18 @@ const AdminPage = () => {
                             </div>
                           ):
                           (<span className="admin-modal-btn-edit" onClick={() => { setIsEditing({ editing: true, acc_idx: accident.acc_idx }) }}>🖊</span>)}
-
+  
                         </div>
-
+  
                       </div>
                       <div style={{ flex: "1" }}>
                         {accident.acc_status === "Y" && 
                         (<img className="admin-modal-btn-edit" src={imgCheck} style={{width:"30px", height:"30px"}} onClick={()=>{updateAccident(accident)}} alt='해결' />)}
                       </div>
                     </div>
-
-
-
+  
+  
+  
                   </li>
                 ))}
               </ul>
@@ -238,6 +238,7 @@ const AdminPage = () => {
       )}
     </div>
   );
+  
 };
 
 export default AdminPage;

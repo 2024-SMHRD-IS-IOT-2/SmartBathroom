@@ -53,10 +53,10 @@ const LoginPage = () => {
 
 
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <p className='gohome-logo' onClick={() => navigate('/')}>SIoT</p>
-      <form onSubmit={handleSubmit}>
-        <div>
+      <form onSubmit={handleSubmit} style={{ width: '400px' }}>
+        <div style={{ marginBottom: '10px' }}>
           <label htmlFor="userId">아이디</label>
           <input
             type="text"
@@ -65,7 +65,7 @@ const LoginPage = () => {
             onChange={(e) => setUserId(e.target.value)} // 아이디 입력 상태 업데이트
           />
         </div>
-        <div>
+        <div style={{ marginBottom: '10px' }}>
           <label htmlFor="userPw">비밀번호</label>
           <input
             type="password"
@@ -74,13 +74,14 @@ const LoginPage = () => {
             onChange={(e) => setUserPw(e.target.value)} // 비밀번호 입력 상태 업데이트
           />
         </div>
-        <div style={{ color: 'red' }}>{loginError}</div>
-        <button type="submit">로그인</button>
-        <button onClick={() => navigate('/join')}>회원가입</button> {/* 회원가입 페이지로 이동 */}
+        <div style={{ color: 'red', marginBottom: '10px' }}>{loginError}</div>
+        <button type="submit" style={{ marginBottom: '10px' }}>로그인</button>
+        <button onClick={() => navigate('/join')} style={{ marginBottom: '10px' }}>회원가입</button> {/* 회원가입 페이지로 이동 */}
       </form>
       <BottomText />
     </div>
   );
+  
 };
 
 export default LoginPage;

@@ -1,11 +1,10 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
 import axios from '../axios';
 
 const TopMenu = () => {
     const navigate = useNavigate();
-
     const { isLoggedin, setIsLoggedin, loginData } = useContext(UserContext);
 
 
@@ -43,12 +42,11 @@ const TopMenu = () => {
 
     return (
         <div className='topmenu-container'>
-            <div className='topmenu-title'>SIoT 스마트 화장실</div>
+            <div className='topmenu-title' onClick={goToHome}><span className='topmenu-logo'>SIoT </span><span>스마트 화장실</span></div>
             {isLoggedin ?
                 (<div>
-                    <span className='topmenu-member-id' style={{marginRight:"30px"}}>{loginData.member_name} 님</span>
-                    
-                    <button className="topmenu-btn" onClick={goToMain} >메인화면</button>
+                    <span style={{marginRight:"30px", fontSize:'30px'}}>{loginData.member_name} 님</span>
+                    <button className="topmenu-btn" onClick={goToMain} >사용자 설정</button>
                     {/* <button className="topmenu-btn" onClick={goToHome} >홈</button> */}
                     <button className="topmenu-btn" onClick={logout}>로그아웃</button>
 

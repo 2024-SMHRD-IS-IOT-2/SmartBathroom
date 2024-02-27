@@ -17,7 +17,7 @@ const Charts = () => {
         const res = await axios.post("/user/handleChartPage", {
           userId: loginData.member_id,
         });
-        console.log(res.data.rows);
+
         //최근 값 100개만 쓰려면
         // const data = res.data.rows.slice(-100);
         const data = res.data.rows;
@@ -39,9 +39,9 @@ const Charts = () => {
     // const interval = setInterval(fetchData, 5000); // 5초마다 업데이트
     // return () => clearInterval(interval);
   }, []);
-
+  console.log(temperatureData);
   return (
-    <div style={{ display: "flex", flexDirection: "column" }}>
+    <div style={{ position: "absolute", width: "100%", height: "100%" }}>
       <ReactECharts
         option={getOption(temperatureData, "온도 (°C)", xAxisData)}
       />

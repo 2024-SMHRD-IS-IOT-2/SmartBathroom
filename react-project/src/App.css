@@ -172,6 +172,7 @@ ul {
     font-size: 25px;
     font-family: 'JalnanGothic', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     display: flex;
+    /* align-items: center; */
     justify-content: center;
 }
 
@@ -183,12 +184,19 @@ ul {
     color: rgb(0, 0, 0);
 
 }
+.topmenu-title:hover{
+    cursor: pointer;
+}
 
 .topmenu-btn {
-    width: 100px;
+    width: 110px;
+    height: 50px;
     padding: 10px 10px;
     font-size: 16px;
     margin-right: 30px;
+}
+.topmenu-logo {
+    color: #4ea2ec;
 }
 
 /* AdminPage */
@@ -278,6 +286,7 @@ ul {
 .acclist-container {
     flex: 1;
     max-height: 100%;
+    width: 100%;
     overflow-y: auto;
 }
 

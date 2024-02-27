@@ -24,7 +24,6 @@ const AccList = ({ member_id }) => {
         await axios.post('/user/showAccident', { userId: member_id })
             .then((res) => {
                 if (res.data.result === "success") {
-                    console.log(res.data.rows);
                     setUserAccidents(res.data.rows);
                 }
                 else {

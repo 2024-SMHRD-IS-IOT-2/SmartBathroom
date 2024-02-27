@@ -22,6 +22,9 @@ const UserPage = () => {
   console.log(loginData.sleep_lightening);
   const [sleepStartTime, setSleepStartTime] = useState(loginData.sleep_time.split('-')[0]);
   const [sleepEndTime, setSleepEndTime] = useState(loginData.sleep_time.split('-').slice(-1)[0]);
+  const [showAlert, setShowAlert] = useState(false); // 알림 상태
+  const [alertMessage, setAlertMessage] = useState(""); // 알림 메시지
+
 
   useEffect(() => {
     console.log("isLoggedin", isLoggedin);
@@ -59,11 +62,18 @@ const UserPage = () => {
     await axios.post('/user/handleSleep', updatedSettings)
       .then((res) => {
         console.log(res.data);
+        setShowAlert(true); // 알림 상태를 true로 설정하여 알림을 띄움
+        setAlertMessage("설정이 저장되었습니다."); // 알림 메시지 설정
+        setTimeout(() => setShowAlert(false), 3000); // 3초 후 알림 사라짐
       })
       .catch((error) => {
         console.error("설정 저장 중 오류 발생:", error);
+        setShowAlert(true); // 에러 시에도 알림 띄우기
+        setAlertMessage("오류가 발생했습니다."); // 오류 메시지
+        setTimeout(() => setShowAlert(false), 3000); // 3초 후 알림 사라짐
       });
   };
+
 
   const goToChangeUiPage = () => {
     navigate('/changeui', { state: { data: loginData, from: "user" } });
@@ -136,6 +146,11 @@ const UserPage = () => {
           <button onClick={saveSettings} style={{ fontSize: '1em' }}>설정 저장</button>
           <button onClick={goToChangeUiPage} style={{ fontSize: '1em', marginBottom: '10px' }}>회원정보 변경</button>
         </div>
+        {showAlert && (
+          <div style={{ position: 'fixed', top:'30%', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#ebe943cf', padding: '20px 40px', borderRadius: '10px', zIndex: 1000, fontSize:'25px'}}>
+            {alertMessage}
+          </div>
+        )}
       </div>
 
       {/* 중앙 : 사고 이력창 */}

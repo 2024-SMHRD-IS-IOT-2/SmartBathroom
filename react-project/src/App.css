@@ -80,7 +80,7 @@ body {
     background-color: #f4f4f4;
     display: flex;
     justify-content: center;
-    align-items: center; /* 중앙에 몰리지 않도록 변경 */
+    align-items: flex-start; /* 중앙에 몰리지 않도록 변경 */
     height: 100%;
     padding: 0;
     margin: 0;

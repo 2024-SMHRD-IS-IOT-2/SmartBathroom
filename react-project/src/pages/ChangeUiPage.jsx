@@ -86,7 +86,7 @@ const ChangeUiPage = () => {
   };
 
   return (
-    <div className="change-ui-page" style={{display:"flex", flexDirection:"column", justifyContent:"center"}}>
+    <div>
       <h1>정보 수정</h1>
       <div style={{display:"flex", justifyContent:"center"}}>
 

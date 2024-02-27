@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from '../axios';
-import { UserContext } from '../contexts/UserContext';
+import React, { useState, useEffect, useContext, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "../axios";
+import { UserContext } from "../contexts/UserContext";
+import Charts from "../components/Chart";
 
 // 시간을 갤럭시 알람 형식으로 변환하는 함수
 // const convertToGalaxyAlarmFormat = (time) => {
@@ -17,7 +18,8 @@ const UserPage = () => {
   const [userAccidents, setUserAccidents] = useState([]);
   const [isEditing, setIsEditing] = useState({ editing: false, acc_idx: "" });
   const [editAccident, setEditAccident] = useState(null);
-  const [updatedAccidentInfo, setUpdatedAccidentInfo] = useState('');
+  const [updatedAccidentInfo, setUpdatedAccidentInfo] = useState("");
+  const editInfoRef = useRef(null);
   const { isLoggedin, loginData } = useContext(UserContext);
   console.log(loginData.sleep_lightening);
   const [sleepStartTime, setSleepStartTime] = useState(loginData.sleep_time.split('-')[0]);
@@ -30,7 +32,7 @@ const UserPage = () => {
     console.log("isLoggedin", isLoggedin);
     if (!isLoggedin) {
       alert("로그인해주세요");
-      navigate('/');
+      navigate("/");
     } else {
       fetchAccidents();
       setSleepTime(loginData.sleepTime || 8); // loginData.sleepTime이 없는 경우 기본값으로 8 설정
@@ -40,7 +42,9 @@ const UserPage = () => {
 
   const fetchAccidents = async () => {
     try {
-      const response = await axios.post('/user/showAccident', { userId: loginData.member_id });
+      const response = await axios.post("/user/showAccident", {
+        userId: loginData.member_id,
+      });
       if (response.data.result === "success") {
         setUserAccidents(response.data.rows);
       } else {
@@ -56,7 +60,7 @@ const UserPage = () => {
     const updatedSettings = {
       sleepTime: sleepTime,
       sleepLightening: sleepLightening,
-      userId: loginData.member_id
+      userId: loginData.member_id,
     };
     console.log("Updated Settings:", updatedSettings);
     await axios.post('/user/handleSleep', updatedSettings)
@@ -76,7 +80,7 @@ const UserPage = () => {
 
 
   const goToChangeUiPage = () => {
-    navigate('/changeui', { state: { data: loginData, from: "user" } });
+    navigate("/changeui", { state: { data: loginData, from: "user" } });
   };
 
   const updateAccInfo = (accident) => {
@@ -92,14 +96,14 @@ const UserPage = () => {
   const closeModal = () => {
     setIsEditing({ editing: false, acc_idx: "" });
     setEditAccident(null);
-    setUpdatedAccidentInfo('');
+    setUpdatedAccidentInfo("");
   };
 
   const saveUpdatedAccidentInfo = async () => {
     try {
       const updatedAccident = {
         ...editAccident,
-        acc_info: updatedAccidentInfo
+        acc_info: updatedAccidentInfo,
       };
       // 서버에 수정된 사고 정보 저장 요청 보내기
       closeModal();
@@ -109,9 +113,25 @@ const UserPage = () => {
   };
 
   return (
-    <div style={{ display: 'flex', alignItems: 'flex-start', height: '100vh', padding: '20px', position: 'relative' }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "flex-start",
+        height: "100vh",
+        padding: "20px",
+        position: "relative",
+      }}
+    >
       {/* 왼쪽 : 회원 정보창 */}
-      <div style={{ display: 'flex', flexDirection: 'column', width: '20%', alignItems: 'center', marginBottom: '20px' }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          width: "20%",
+          alignItems: "center",
+          marginBottom: "20px",
+        }}
+      >
         <h1>{loginData.member_id}님의 정보</h1>
         <div style={{ textAlign: 'center', width: '100%' }}>
           <p style={{ fontSize: '1.5em', marginBottom: '10px' }}>이름: {loginData.member_name}</p>
@@ -154,11 +174,28 @@ const UserPage = () => {
       </div>
 
       {/* 중앙 : 사고 이력창 */}
-      <div style={{ display: 'flex', flexDirection: 'column', width: '20%', alignItems: 'center', marginBottom: '20px' }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          width: "20%",
+          alignItems: "center",
+          marginBottom: "20px",
+        }}
+      >
         <h1>사고 이력</h1>
-        <ul style={{ listStyleType: 'none', paddingLeft: 0 }}>
+        <ul style={{ listStyleType: "none", paddingLeft: 0 }}>
           {userAccidents.map((accident, index) => (
-            <li key={index} style={{ border: '1px solid black', borderRadius: '5px', padding: '10px', marginBottom: '10px', width: '80%' }}>
+            <li
+              key={index}
+              style={{
+                border: "1px solid black",
+                borderRadius: "5px",
+                padding: "10px",
+                marginBottom: "10px",
+                width: "80%",
+              }}
+            >
               <p>발생 시간: {new Date(accident.acc_time).toLocaleString()}</p>
               <p>사고 정보: {accident.acc_info}</p>
               <button onClick={() => updateAccInfo(accident)}>수정</button>
@@ -169,18 +206,59 @@ const UserPage = () => {
       </div>
 
       {/* 오른쪽 : 차트 보기 버튼 */}
-      <div style={{ display: 'flex', flexDirection: 'column', width: '60%', alignItems: 'center', marginBottom: '20px' }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          width: "60%",
+          alignItems: "center",
+          marginBottom: "20px",
+          position: "relative",
+        }}
+      >
         <h1>차트(그래프)</h1>
+        <Charts />
       </div>
 
       {/* 모달 창 */}
       {isEditing.editing && (
-        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px', maxWidth: '80%', maxHeight: '80%', overflowY: 'auto' }}>
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "white",
+              padding: "20px",
+              borderRadius: "10px",
+              maxWidth: "80%",
+              maxHeight: "80%",
+              overflowY: "auto",
+            }}
+          >
             <h2>사고 정보 수정</h2>
             <label htmlFor="updatedAccidentInfo">사고 정보:</label>
-            <textarea id="updatedAccidentInfo" value={updatedAccidentInfo} onChange={handleAccidentInfoChange} />
-            <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'space-between' }}>
+            <textarea
+              id="updatedAccidentInfo"
+              value={updatedAccidentInfo}
+              onChange={handleAccidentInfoChange}
+            />
+            <div
+              style={{
+                marginTop: "10px",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
               <button onClick={saveUpdatedAccidentInfo}>저장</button>
               <button onClick={closeModal}>닫기</button>
             </div>

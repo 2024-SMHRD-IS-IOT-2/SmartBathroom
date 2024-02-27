@@ -45,7 +45,8 @@ const TopMenu = () => {
             <div className='topmenu-title' onClick={goToHome}><span className='topmenu-logo'>SIoT </span><span>스마트 화장실</span></div>
             {isLoggedin ?
                 (<div>
-                    <span style={{marginRight:"30px", fontSize:'30px'}}>{loginData.member_name} 님</span>
+                    <span style={{marginRight:"30px", fontSize:"30px"}}>{loginData.member_name} 님</span>
+                    
                     <button className="topmenu-btn" onClick={goToMain} >사용자 설정</button>
                     {/* <button className="topmenu-btn" onClick={goToHome} >홈</button> */}
                     <button className="topmenu-btn" onClick={logout}>로그아웃</button>

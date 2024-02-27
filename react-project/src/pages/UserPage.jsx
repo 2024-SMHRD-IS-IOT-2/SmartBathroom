@@ -114,7 +114,7 @@ const UserPage = () => {
               <p>발생 시간: {new Date(accident.acc_time).toLocaleString()}</p>
               <p>사고 정보: {accident.acc_info}</p>
               <button onClick={() => updateAccInfo(accident)}>수정</button>
-              <button onClick={() => updateAccInfo(accident)}>해결</button>
+              {/* <button onClick={() => updateAccInfo(accident)}>해결</button> */}
             </li>
           ))}
         </ul>

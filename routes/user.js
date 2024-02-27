@@ -177,7 +177,7 @@ router.post("/showList", (req, res) => {
   conn.query(sql, (err, rows) => {
     if (rows.length > 0) {
       res.json({ rows: rows, result: "success" });
-      console.log("user.js 관리자가 열람할 회원정보 보냈습니다");
+      console.log("user.js 관리자가 열람할 회원정보를 보냈습니다");
     } else {
       console.log("user.js showlist err :", err);
       res.json({ result: "fail" });
@@ -201,7 +201,7 @@ router.post("/showAccident", (req, res) => {
     if (rows.length > 0) {
       // console.log(rows);
       res.json({ rows: rows, result: "success" });
-      console.log("user.js 관리자가 열람할 사고 정보 보냈습니다.");
+      console.log("user.js 관리자가 열람할 사고 정보를 보냈습니다.");
     } else {
       res.json({ result: "none" });
       console.log("user.js 사고이력 없음");

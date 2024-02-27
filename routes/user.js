@@ -231,11 +231,7 @@ router.post("/updateAccident", (req, res) => {
 })
 
 
-// 아두이노 데이터 받기 skeleton code
-/*
-할 것 : db로 데이터 저장. session 에서 회원 id 받아서 저장.
-
-*/
+// 아두이노 데이터 처리 
 router.get("/sensorData", (req, res) => {
   console.log("receiving data");
   const { humidity, temp, nh3, meth, btnEmerg, falldown, member_id } = req.query;
@@ -259,11 +255,11 @@ router.get("/sensorData", (req, res) => {
   // 받은 값으로 accidents 저장
   let accNote = "";
   if (btnEmerg === "1") accNote = "화장실 갇힘 감지"
-  // else if (falldown === 1) accNote = "넘어짐 감지"
+  else if (falldown === "1") accNote = "넘어짐 감지"
   
   console.log(accNote);
-//  || falldown === "1"  // 충격감지 나중에 포함
-  if (btnEmerg === "1"){
+
+  if (btnEmerg === "1" || falldown === "1"){
     const sql2 = `insert into accidents (acc_info, acc_status, member_id) 
     values (?,?,?)`;
     conn.query(sql2, [accNote, "Y", member_id],

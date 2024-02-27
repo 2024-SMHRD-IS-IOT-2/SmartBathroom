@@ -69,7 +69,7 @@ void loop() {
     }
     // falldown sensor
     bool fallsensor = digitalRead(FALLPIN);
-    if (fallsensor) {
+    if (!fallsensor) {
       fallDetected = true;
     }
     //led
@@ -139,9 +139,10 @@ void sendDataToServer() {
                 "&meth=" + String(meth) +
                 "&btnEmerg=" + String(btnPressed) +
                 "&falldown=" + String(fallDetected);
-  sendRequest(url, data);  
+  // sendRequest(url, data);  
+    Serial.println(data);
 
-  //testing.
+  // testing.
   // String testData = "humidity=" + String(h) + 
   //               "  //  temp=" + String(t) +
   //               "  //  nh3=" + String(nh3) +
@@ -150,6 +151,7 @@ void sendDataToServer() {
   //               "  //  btnEmerg=" + String(btnPressed) +
   //               "  // falldown=" + String(fallDetected);
   // Serial.println(testData);
+
 
   //reset the btn, falldown.
   btnPressed = false;

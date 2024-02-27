@@ -1,10 +1,77 @@
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700&display=swap');
 
 @font-face {
+    font-family: 'Ownglyph_meetme-Rg';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2402_1@1.0/Ownglyph_meetme-Rg.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
     font-family: 'JalnanGothic';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_231029@1.1/JalnanGothic.woff') format('woff');
     font-weight: normal;
     font-style: normal;
+}
+
+.bottom-gohome-logo{
+    font-family: 'Ownglyph_meetme-Rg';
+    font-size: 30px;
+    color: #4ea2ec;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.bottom-copyx-text {
+    margin-top: 10px;
+    text-align: center;
+    margin-left: 50px;
+}
+
+.form-check-btn {
+    width: 180px;
+    display: block;
+    margin: 0 auto;
+}
+
+.joinpage-top-text {
+    margin-top: 0px;
+    margin-bottom: 8px;
+}
+
+.gohome-logo{
+    font-family: 'Ownglyph_meetme-Rg';
+    color: #4199e6;
+    font-size: 100px;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.gohome-logo:hover {
+    color: #1a559c;
+    transform: scale(1.05);
+}
+
+input[type="text"]#addr {
+    flex-grow: 1;
+    margin-bottom: 0%;
+}
+
+/* 버튼에 대한 스타일 */
+button.addrBtn {
+    padding: 5px;
+    margin-top: 0%;
+    background-color: #808080;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+/* 버튼에 마우스를 올렸을 때의 스타일 */
+button.addrBtn:hover {
+    background-color: #696969;
 }
 
 /* 이제 'JalnanGothic' 폰트를 원하는 곳에서 사용할 수 있습니다. 예를 들어, body 전체에 적용하려면: */
@@ -13,11 +80,15 @@ body {
     background-color: #f4f4f4;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start; /* 중앙에 몰리지 않도록 변경 */
     height: 100%;
-    padding: 20px;
+    padding: 0;
     margin: 0;
 }
+#root {
+    flex : 1;
+}
+
 #root {
     flex : 1;
 }
@@ -27,11 +98,8 @@ form {
     font-family: 'JalnanGothic', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     background-color: #ffffff;
     padding: 40px;
-    padding: 40px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 500px;
-    max-width: 90%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     width: 500px;
     max-width: 90%;
 }
@@ -48,52 +116,38 @@ input[type="password"],
 input[type="date"] {
     width: 100%;
     padding: 15px;
-    margin: 10px 0;
-    padding: 15px;
-    margin: 10px 0;
+    margin-bottom: 15px;
     display: inline-block;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
     font-size: 16px;
-    /* 변경된 부분 */
-    font-size: 16px;
-    /* 변경된 부분 */
 }
 
 /* 라벨 스타일 */
 label {
     display: block;
     margin-bottom: 10px;
-    /* 변경된 부분 */
-    margin-bottom: 10px;
-    /* 변경된 부분 */
     color: #333;
     font-size: 18px;
-    /* 변경된 부분 */
-    font-size: 18px;
-    /* 변경된 부분 */
 }
 
 /* 버튼 스타일 */
 button {
     font-family: 'JalnanGothic', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     width: 100%;
-    background-color: #4CAF50;
+    background-color: rgb(67, 191, 56);
     color: white;
     padding: 16px 20px;
-    /* 변경된 부분 */
     margin: 10px 0;
-    /* 변경된 부분 */
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 18px;
-    /* 변경된 부분 */
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #44db4c;
 }
 
 ul {
@@ -104,32 +158,39 @@ ul {
 
 /* TopMenu */
 .topmenu-container {
+    font-family: 'Ownglyph_meetme-Rg';
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 1000;
-    height: 50px;
-    background-color: rgb(168, 221, 205);
+    height: 70px;
+    background-color: #f4f4f4bc;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding-right: 0 50px;
-    
+
+}
+.topmenu-member-id{
+    font-size: 25px;
+    font-family: 'JalnanGothic', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    display: flex;
+    justify-content: center;
 }
 
 .topmenu-title {
     flex: 1;
     margin-left: 100px;
     align-items: center;
-    font-size: 25px;
+    font-size: 30px;
+    color: rgb(0, 0, 0);
 
 }
 
 .topmenu-btn {
-    
     width: 100px;
-    padding: 5px 5px;
+    padding: 10px 10px;
     font-size: 16px;
     margin-right: 30px;
 }
@@ -149,6 +210,24 @@ ul {
     font-size: 1.5em;
 }
 
+.admin-area-btn {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    position: absolute;
+    top: 0;
+    right: 20px;
+}
+
+.admin-btn-main {
+    font-size: 1em;
+    margin-right: 10px;
+}
+
+.admin-btn-logout {
+    font-size: 1em;
+}
 
 .admin-area-list {
     display: flex;
@@ -204,12 +283,9 @@ ul {
     right: 10px;
 }
 
-
-
 .admin-modal-item-hl {
     border: red solid 2px;
     background-color: lightcoral;
-
 }
 
 .admin-modal-btn-edit {
@@ -221,5 +297,44 @@ ul {
     cursor: pointer;
 }
 
-
 /* UserPage */
+
+.user-container {
+    display: flex;
+    flex-direction: row; /* 가로 방향으로 요소를 배치합니다 */
+    align-items: flex-start; /* 상단에 요소를 정렬합니다 */
+    justify-content: space-between; /* 요소 사이에 동일한 공간을 배치합니다 */
+    height: 100vh;
+    padding: 20px;
+}
+
+.user-title {
+    font-family: 'JalnanGothic', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.user-content {
+    font-family: 'JalnanGothic', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 1.2em;
+    color: #555;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.user-btn {
+    font-family: 'JalnanGothic', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #ff6600;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.user-btn:hover {
+    background-color: #e55d00;
+}

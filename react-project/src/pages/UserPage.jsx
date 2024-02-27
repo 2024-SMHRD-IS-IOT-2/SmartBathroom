@@ -217,9 +217,9 @@ const UserPage = () => {
         }}
       >
         <h1>차트(그래프)</h1>
+
         <Charts />
       </div>
-
       {/* 모달 창 */}
       {isEditing.editing && (
         <div

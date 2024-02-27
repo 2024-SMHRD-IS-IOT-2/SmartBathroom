@@ -41,11 +41,6 @@ function HomePage() {
     <div style={{ position: 'relative', maxWidth: '100%', margin: '0 auto', paddingBottom: '20px' }}>
       {/* 시연 영상 */}
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '80vh', position: 'relative', marginTop: '20px' }}>
-        <img
-          src={img} 
-          alt=""
-          style={{ position: 'absolute', top: '10px', right: '10px', width: '15%', height: 'auto', opacity: '0.5' }} // 이미지 위치 및 크기 조정
-        />
         <iframe
           width="80%"
           height="100%"
@@ -55,9 +50,15 @@ function HomePage() {
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
         ></iframe>
+        <img
+          src={img} 
+          alt=""
+          style={{ position: 'absolute', bottom: '10px', right: '150px', width: '15%', height: 'auto', opacity: '0.5' }} // 이미지 위치 및 크기 조정
+        />
       </div>
     </div>
   );
+  
 }
 
 export default HomePage;

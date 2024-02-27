@@ -23,7 +23,7 @@ function App() {
 
     <UserContext.Provider value = {{isLoggedin, setIsLoggedin, loginData, setLoginData}}>
       <TopMenu />
-      <div style={{paddingTop: "40px"}}>
+      <div style={{paddingTop: "60px"}}>
         <Routes>
           <Route path="/" element={<HomePage />} /> 
           <Route path="/login" element={<LoginPage />} /> 

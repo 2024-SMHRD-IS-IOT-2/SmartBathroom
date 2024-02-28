@@ -173,7 +173,6 @@ router.post("/handleChartPage", (req, res) => {
   const sql = `select * from sensors where member_id=?`;
   conn.query(sql, [userId], (err, rows) => {
     if (rows.length > 0) {
-      console.log("success", rows);
       res.json({ rows: rows, result: "success" });
     } else {
       console.log("fail");
@@ -196,13 +195,31 @@ router.post("/showList", (req, res) => {
     }
   });
 });
+
 //관리자 페이지 : 현재 사고현황이 "Y" 인 유저만 반환
 router.post("/updateAccidentStatus", (req, res) => {
   const sql = `select distinct member_id from accidents where acc_status = "Y"`;
   conn.query(sql, (err, rows) => {
-    res.json({ result: "success", rows: rows });
+      res.json({ result: "success", rows: rows });
+
   });
 });
+
+//회원 페이지 : 현재 경고창을 띄울지 말지.
+router.post("/checkAccidentForAlert", (req, res) => {
+  const {member_id} = req.body;
+  const sql = `select 1 from accidents where member_id = ? and acc_status = "Y" limit 1`;
+  conn.query(sql, [member_id], (err, rows) => {
+    if (rows.length > 0) {
+      res.json({ result: "success" });
+
+    } else {
+      res.json({result:"fail"});
+
+    }
+  });
+});
+
 
 //사고 정보 보내기
 router.post("/showAccident", (req, res) => {

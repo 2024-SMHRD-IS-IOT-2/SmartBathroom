@@ -12,10 +12,8 @@
 #define SONARTRIG 16
 #define SONARECHO 17
 #define LEDPIN 12
-
 DHT dht(DHTPIN, DHTTYPE);
 WiFiClient wifiClient;
-
 
 const char* ssid = "SMHRD_강의실C";
 const char* password = "ccccc33333";

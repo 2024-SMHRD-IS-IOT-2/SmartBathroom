@@ -11,14 +11,11 @@ const UserPage = () => {
   const [sleepTime, setSleepTime] = useState("22:00-9:00"); // 초기값을 빈 문자열로 설정합니다.
   const [sleepLightening, setSleepLightening] = useState(50); // 초기값을 0으로 설정합니다.
   const navigate = useNavigate();
-  const { isLoggedin, loginData } = useContext(UserContext);
+  const { isLoggedin, loginData, trigAlert, setTrigAlert } = useContext(UserContext);
   console.log(loginData.sleep_lightening);
   const [sleepStartTime, setSleepStartTime] = useState("");
   const [sleepEndTime, setSleepEndTime] = useState("");
-  const [alertMessage, setAlertMessage] = useState(""); // 알림 메시지
-  const [alertKey, setAlertKey] = useState(0);
-
-
+  const [alertInfo, setAlertInfo] = useState({});
 
   useEffect(() => {
     if (!isLoggedin) {
@@ -42,6 +39,35 @@ const UserPage = () => {
   }, [isLoggedin, loginData, navigate]);
 
 
+  // 5초마다 사고 확인.
+  useEffect(()=>{
+
+    const checkForAlert = async ()=>{
+      await axios.post('/user/checkAccidentForAlert', {member_id : loginData.member_id})
+      .then ((res)=>{
+        if (res.data.result === "success"){
+
+            setAlertInfo({
+              message : "감지된 사고가 있습니다.",
+              duration : "3000",
+              backgroundColor : "red"
+            })
+            setTrigAlert(trigAlert=>!trigAlert);
+        }
+
+      })
+    }
+
+    checkForAlert();
+
+    //5초마다 사고리스트 업데이트
+    const interval = setInterval(checkForAlert, 5000);
+    return () => clearInterval(interval);
+
+
+  },[])
+
+
 
   const saveSettings = async () => {
     const updatedSettings = {
@@ -53,13 +79,21 @@ const UserPage = () => {
     await axios.post('/user/handleSleep', updatedSettings)
       .then((res) => {
         console.log(res.data);
-        setAlertMessage('설정이 저장되었습니다.'); // 알림 메시지 설정
-        setAlertKey(prevKey => prevKey + 1); // 여기로 이동
+        setAlertInfo({
+          message : "설정이 저장됐습니다.",
+          duration : "3000",
+          backgroundColor : "#12a3fd"
+        }); // 알림 메시지 설정
+        setTrigAlert(trigAlert => !trigAlert);
       })
       .catch((error) => {
         console.error("설정 저장 중 오류 발생:", error);
-        setAlertMessage("오류가 발생했습니다."); // 오류 메시지
-        setAlertKey(prevKey => prevKey + 1); // 오류 발생 시에도 키를 업데이트할 수 있습니다.
+        setAlertInfo({
+          message : "오류가 발생했습니다.",
+          duration : "3000",
+          backgroundColor : "#d5ff02"
+        }); // 알림 메시지 설정
+        setTrigAlert(trigAlert => !trigAlert);
       });
   };
 
@@ -75,7 +109,7 @@ const UserPage = () => {
       style={{
         display: "flex",
         alignItems: "flex-start",
-        height: "100vh",
+        height: "100%",
         padding: "20px",
         position: "relative",
       }}
@@ -124,10 +158,8 @@ const UserPage = () => {
           <button onClick={saveSettings} style={{ fontSize: '1em' }}>설정 저장</button>
           <button onClick={goToChangeUiPage} style={{ fontSize: '1em', marginBottom: '10px' }}>회원정보 변경</button>
         </div>
-        <AlertComponent message={alertMessage} duration={3000} key={alertKey} backgroundColor="#fff129e8" />
 
-
-
+        <AlertComponent alertInfo={alertInfo}/>
       </div>
 
       {/* 중앙 : 사고 이력창 */}

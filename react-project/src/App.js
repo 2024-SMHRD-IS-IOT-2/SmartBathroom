@@ -16,12 +16,12 @@ function App() {
 
   const [isLoggedin, setIsLoggedin] = useState(false);
   const [loginData, setLoginData] = useState({});
-
+  const [trigAlert, setTrigAlert] = useState(false);
 
   return (
     <div>
 
-    <UserContext.Provider value = {{isLoggedin, setIsLoggedin, loginData, setLoginData}}>
+    <UserContext.Provider value = {{isLoggedin, setIsLoggedin, loginData, setLoginData, trigAlert, setTrigAlert}}>
       <TopMenu />
       <div style={{paddingTop: "60px"}}>
         <Routes>

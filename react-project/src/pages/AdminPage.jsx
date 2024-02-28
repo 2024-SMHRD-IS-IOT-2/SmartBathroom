@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'; // 페이지 이동을 위해 us
 import axios from '../axios';
 import { UserContext } from '../contexts/UserContext';
 import AccList from '../components/AccList';
+import AlertComponent from '../components/AlertComponent';
 
 const AdminPage = () => {
   const navigate = useNavigate(); // 페이지 이동을 위한 네비게이트 함수
@@ -10,16 +11,28 @@ const AdminPage = () => {
   const [accidentUserId, setAccidentUserId] = useState([]);  //사고가 난 회원들 id
   const [selectedUser, setSelectedUser] = useState(null); // 선택된 사용자 정보를 담을 상태 변수
   const [modalOpen, setModalOpen] = useState(false); // 모달 창이 열려있는지를 나타내는 상태 변수
-  const { isLoggedin } = useContext(UserContext); // context 에 로그인 저장돼있음
+  const {isLoggedin, trigAlert, setTrigAlert} = useContext(UserContext); // context 에 로그인 저장돼있음
+  const [alertInfo, setAlertInfo] = useState({}); // 알림 메시지
+
 
     // 회원 사고리스트
     // 현재 사고가 나있는 회원들 목록 불러옴. (색깔 변경용)
   const refreshAccidentList = async () => {
       await axios.post('/user/updateAccidentStatus')
         .then((res) => {
-          // [ { member_id: '12345' }, { member_id: 'q1q2' } ] 포맷
+          // [ { member_id: '12345' }, { member_id: 'q1q2' } ] rows format.
           if (res.data.result === "success") {
             setAccidentUserId((res.data.rows).map(user => user.member_id));
+            if (res.data.rows.length > 0 ){
+              setAlertInfo({
+                message : "감지된 사고가 있습니다.",
+                duration : "3000",
+                backgroundColor : "red"
+              })
+              setTrigAlert(trigAlert=> !trigAlert);
+
+            }
+
           }
         })
         .catch((err) => {
@@ -79,6 +92,7 @@ const AdminPage = () => {
 
   return (
     <div className={"admin-container"}>
+      <AlertComponent alertInfo={alertInfo}/>
       <h1 className={"admin-title"}>회원 목록</h1>
   
       <div className={"admin-area-list"}>

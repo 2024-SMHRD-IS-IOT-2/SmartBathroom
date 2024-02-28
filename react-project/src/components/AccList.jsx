@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import axios from '../axios'
+import { UserContext } from '../contexts/UserContext';
 
 
 const AccList = ({ member_id }) => {
@@ -36,24 +37,6 @@ const AccList = ({ member_id }) => {
             });
     }
 
-    // //test dummy data
-    const testData = [
-        {
-            acc_idx: 20,
-            acc_info: "화장실 갇힘 감지",
-            acc_status: "Y",
-            acc_time: "2024-02-26T06:46:36.000Z",
-            member_id: "sensor"
-        },
-        {
-            acc_idx: 21,
-            acc_info: "화장실 갇힘 감지",
-            acc_status: "Y",
-            acc_time: "2024-02-26T06:46:49.000Z",
-            member_id: "sensor"
-        }
-    ]
-
     // // 사고 처리 완료버튼.
     const updateAccident = (item) => {
         //업데이트할 사고 아이템
@@ -72,7 +55,7 @@ const AccList = ({ member_id }) => {
     }
 
 
-    // // 수정확인 버튼.
+    // 수정확인 버튼.
     const updateAccInfo = async (item) => {
         const updatedAccident = { ...item, acc_info: editInfoRef.current.value };
         // 사고아이템 stata 업데이트

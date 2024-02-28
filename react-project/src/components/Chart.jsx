@@ -41,7 +41,14 @@ const Charts = () => {
   }, []);
   console.log(temperatureData);
   return (
-    <div style={{ position: "absolute", width: "100%", height: "100%" }}>
+    <div
+      style={{
+        position: "absolute",
+        width: "100%",
+        height: "100%",
+        top: "100px",
+      }}
+    >
       <ReactECharts
         option={getOption(temperatureData, "온도 (°C)", xAxisData)}
       />
@@ -63,7 +70,14 @@ const getOption = (data, yAxisName, xAxisData) => {
     },
     xAxis: {
       type: "category",
+      boundaryGap: "false",
       data: xAxisData,
+      nameLocation: "middle",
+      interval: 3600 * 1000,
+      formatter: function (xAxisData) {
+        // 시간 형식 지정
+        return moment(xAxisData).format("HH");
+      },
     },
     yAxis: {
       type: "value",

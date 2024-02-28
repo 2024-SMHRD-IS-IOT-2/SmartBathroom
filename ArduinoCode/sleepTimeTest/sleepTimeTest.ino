@@ -5,7 +5,7 @@
 #define DHTPIN 18
 #define DHTTYPE DHT22
 #define METHPIN 34
-#define NH3 35
+#define NH3PIN 4
 #define VENTPIN 17
 #define EMERGBTNPIN 27
 #define FALLPIN 14
@@ -24,9 +24,9 @@ const int serverPort = 3001; // Port of your Node.js server
 const char* userId = "sensor";
 
 unsigned long prevMillis = 0;  // last time data sent
-const long interval = 10000;  // time interval in milliSecond
+const long interval = 500;  // time interval in milliSecond
 bool isSleepLightOn = false; // LED sleeplight
-int sleepLightBright = 80; //LED 밝기 조절.
+int sleepLightBright = 50; //LED 밝기 조절.
 bool btnPressed = false;
 bool fallDetected = false;
 int distance = 0;
@@ -37,12 +37,12 @@ bool check = true;    //초음파 출입감지
 
 void setup() {
   Serial.begin(115200);
-  connectToWiFi();
+  // connectToWiFi();
 
 //pin setup
   dht.begin();
   pinMode(METHPIN, INPUT);
-  pinMode(NH3, INPUT);
+  pinMode(NH3PIN, INPUT);
   pinMode(EMERGBTNPIN, INPUT);
   pinMode(SONARTRIG, OUTPUT);
   pinMode(SONARECHO, INPUT);
@@ -51,7 +51,8 @@ void setup() {
 }
 
 void loop() {
-  if (WiFi.status() == WL_CONNECTED) {
+
+  // if (WiFi.status() == WL_CONNECTED) {
 
     unsigned long curMillis = millis();
 
@@ -75,7 +76,7 @@ void loop() {
     //led
     ledControl();
 
-  }
+  // } // end if WIFI.STATUS
 }
 
 
@@ -129,7 +130,7 @@ void sendDataToServer() {
 
   float h = dht.readHumidity();
   float t = dht.readTemperature();
-  int nh3 = analogRead(NH3);
+  float nh3 = analogRead(NH3PIN);
   float meth = analogRead(METHPIN);
 
   String data = "member_id=" + String(userId) + 

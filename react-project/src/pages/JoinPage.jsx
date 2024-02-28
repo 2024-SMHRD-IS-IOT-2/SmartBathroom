@@ -101,7 +101,7 @@ const JoinPage = () => {
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <span className='gohome-logo' onClick={() => navigate('/')}>SIoT</span>
       <h1 className='joinpage-top-text'>회원가입</h1>
-      <form onSubmit={handleSubmit} style={{ width: '400px' }}>
+      <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="userId">아이디</label>
           <input type="text" id="userId" ref={userIdRef} />

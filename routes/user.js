@@ -102,6 +102,7 @@ router.get("/getSession", (req, res) => {
 router.post("/handleLogout", (req, res) => {
   req.session.destroy();
   res.json({ result: "success" });
+
 });
 
 // 개인정보 수정(ChangeUi)
@@ -188,7 +189,7 @@ router.post("/showList", (req, res) => {
   conn.query(sql, (err, rows) => {
     if (rows.length > 0) {
       res.json({ rows: rows, result: "success" });
-      console.log("user.js 관리자가 열람할 회원정보 보냈습니다");
+      console.log("user.js 관리자가 열람할 회원정보를 보냈습니다");
     } else {
       console.log("user.js showlist err :", err);
       res.json({ result: "fail" });
@@ -210,7 +211,6 @@ router.post("/showAccident", (req, res) => {
   conn.query(sql, [userId], (err, rows) => {
     if (rows.length > 0) {
       res.json({ rows: rows, result: "success" });
-      console.log("user.js 관리자가 열람할 사고 정보 보냈습니다.");
     } else {
       res.json({ result: "none" });
       console.log("user.js 사고이력 없음");
@@ -244,11 +244,7 @@ router.get("/handleLogout", (req, res) => {
   res.json({ result: "success" });
 });
 
-// 아두이노 데이터 받기 skeleton code
-/*
-할 것 : db로 데이터 저장. session 에서 회원 id 받아서 저장.
-
-*/
+// 아두이노 데이터 받기
 router.get("/sensorData", (req, res) => {
   console.log("receiving data");
   const { humidity, temp, nh3, meth, btnEmerg, falldown, member_id } =

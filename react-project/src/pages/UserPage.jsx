@@ -4,33 +4,40 @@ import { UserContext } from "../contexts/UserContext";
 import Charts from "../components/Chart";
 import AccList from "../components/AccList";
 import axios from '../axios';
+import AlertComponent from "../components/AlertComponent";
 
 
 const UserPage = () => {
+  const [sleepTime, setSleepTime] = useState("22:00-9:00"); // 초기값을 빈 문자열로 설정합니다.
+  const [sleepLightening, setSleepLightening] = useState(50); // 초기값을 0으로 설정합니다.
   const navigate = useNavigate();
-  const [sleepTime, setSleepTime] = useState("23:00-06:00");
-  const [sleepLightening, setSleepLightening] = useState(50);
   const { isLoggedin, loginData } = useContext(UserContext);
   console.log(loginData.sleep_lightening);
   const [sleepStartTime, setSleepStartTime] = useState("");
   const [sleepEndTime, setSleepEndTime] = useState("");
-  const [showAlert, setShowAlert] = useState(false); // 알림 상태
   const [alertMessage, setAlertMessage] = useState(""); // 알림 메시지
+  const [alertKey, setAlertKey] = useState(0);
 
 
 
   useEffect(() => {
-    console.log("isLoggedin", isLoggedin);
     if (!isLoggedin) {
       alert("로그인해주세요");
       navigate("/");
     } else {
-
-      setSleepStartTime(loginData.sleep_time.split('-')[0]);
-      setSleepEndTime(loginData.sleep_time.split('-')[1]);
-      console.log("sleeptime", sleepStartTime, sleepEndTime);
-      setSleepTime(loginData.sleepTime);
-      setSleepLightening(loginData.sleep_lightening);
+      // loginData가 정의되어 있고, sleep_time이 유효한지 확인합니다.
+      if (loginData && loginData.sleep_time) {
+        const times = loginData.sleep_time.split('-');
+        if (times.length === 2) {
+          setSleepStartTime(times[0]);
+          setSleepEndTime(times[1]);
+          setSleepTime(loginData.sleep_time); // 여기서 sleepTime을 업데이트 합니다.
+        }
+      }
+      // sleep_lightening이 유효한지 확인합니다.
+      if (loginData && loginData.sleep_lightening) {
+        setSleepLightening(loginData.sleep_lightening);
+      }
     }
   }, [isLoggedin, loginData, navigate]);
 
@@ -46,15 +53,13 @@ const UserPage = () => {
     await axios.post('/user/handleSleep', updatedSettings)
       .then((res) => {
         console.log(res.data);
-        setShowAlert(true); // 알림 상태를 true로 설정하여 알림을 띄움
-        setAlertMessage("설정이 저장되었습니다."); // 알림 메시지 설정
-        setTimeout(() => setShowAlert(false), 3000); // 3초 후 알림 사라짐
+        setAlertMessage('설정이 저장되었습니다.'); // 알림 메시지 설정
+        setAlertKey(prevKey => prevKey + 1); // 여기로 이동
       })
       .catch((error) => {
         console.error("설정 저장 중 오류 발생:", error);
-        setShowAlert(true); // 에러 시에도 알림 띄우기
         setAlertMessage("오류가 발생했습니다."); // 오류 메시지
-        setTimeout(() => setShowAlert(false), 3000); // 3초 후 알림 사라짐
+        setAlertKey(prevKey => prevKey + 1); // 오류 발생 시에도 키를 업데이트할 수 있습니다.
       });
   };
 
@@ -119,11 +124,10 @@ const UserPage = () => {
           <button onClick={saveSettings} style={{ fontSize: '1em' }}>설정 저장</button>
           <button onClick={goToChangeUiPage} style={{ fontSize: '1em', marginBottom: '10px' }}>회원정보 변경</button>
         </div>
-        {showAlert && (
-          <div style={{ position: 'fixed', top:'30%', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#ebe943cf', padding: '20px 40px', borderRadius: '10px', zIndex: 1000, fontSize:'25px'}}>
-            {alertMessage}
-          </div>
-        )}
+        <AlertComponent message={alertMessage} duration={3000} key={alertKey} backgroundColor="#fff129e8" />
+
+
+
       </div>
 
       {/* 중앙 : 사고 이력창 */}
@@ -136,7 +140,7 @@ const UserPage = () => {
           marginBottom: "20px",
         }}
       >
-        <AccList member_id={loginData.member_id}/>
+        <AccList member_id={loginData.member_id} />
       </div>
 
       {/* 오른쪽 : 차트 보기 버튼 */}

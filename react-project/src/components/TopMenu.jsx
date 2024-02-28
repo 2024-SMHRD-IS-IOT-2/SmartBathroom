@@ -42,7 +42,7 @@ const TopMenu = () => {
       {isLoggedin ? (
         <div>
           <span style={{ marginRight: "30px", fontSize: "30px" }}>{loginData.member_name} 님</span>
-          <button className="topmenu-btn" onClick={goToMain}>사용자 설정</button>
+          <button className="topmenu-btn" onClick={goToMain}>마이 페이지</button>
           <button className="topmenu-btn" onClick={logout}>로그아웃</button>
         </div>
       ) : (

@@ -365,3 +365,7 @@ ul {
 .user-btn:hover {
     background-color: #e55d00;
 }
+
+.echarts-root {
+    font-family: 'JalnanGothic',
+}

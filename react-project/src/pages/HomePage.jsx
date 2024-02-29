@@ -91,11 +91,12 @@ function HomePage() {
                 overflow: "hidden",
                 marginRight: "20px",
                 flex: "1",
+                textAlign:"center"
               }}
             >
-              <h2>팀장</h2>
-              <p>이름: 김성재</p>
-              <p>역할: 총괄,아두이노</p>
+              
+              <h1>김성재(팀장)</h1>
+              <h3>역할:<br></br>PM,Arduino</h3>
             </div>
             <div
               style={{
@@ -105,11 +106,12 @@ function HomePage() {
                 overflow: "hidden",
                 marginRight: "20px",
                 flex: "1",
+                textAlign:"center"
               }}
             >
-              <h3>팀원</h3>
-              <p>이름: 최교인</p>
-              <p>역할: 프론트,DB</p>
+            
+              <h1>최교인</h1>
+              <h3>역할:<br></br>DB,백엔드</h3>
             </div>
             <div
               style={{
@@ -119,11 +121,12 @@ function HomePage() {
                 overflow: "hidden",
                 marginRight: "20px",
                 flex: "1",
+                textAlign:"center"
               }}
             >
-              <h3>팀원</h3>
-              <p>이름: 하승철</p>
-              <p>역할: 프론트,백엔드</p>
+              
+              <h1>하승철</h1>
+              <h3>역할<br></br>프론트,백엔드</h3>
             </div>
             <div
               style={{
@@ -131,11 +134,12 @@ function HomePage() {
                 padding: "10px",
                 overflow: "hidden",
                 flex: "1",
+                textAlign:"center"
               }}
             >
-              <h3>팀원</h3>
-              <p>이름: 임용묵</p>
-              <p>역할: 프론트,백엔드</p>
+             
+              <h1>임용묵</h1>
+              <h3>역할:<br></br>프론트,백엔드</h3>
             </div>
           </div>
         </div>

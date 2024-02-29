@@ -224,7 +224,7 @@ router.post("/checkAccidentForAlert", (req, res) => {
 //사고 정보 보내기
 router.post("/showAccident", (req, res) => {
   const { userId } = req.body;
-  const sql = `select * from accidents where member_id=?`;
+  const sql = `select * from accidents where member_id=? order by acc_time desc`;
   conn.query(sql, [userId], (err, rows) => {
     if (rows.length > 0) {
       res.json({ rows: rows, result: "success" });
@@ -280,6 +280,22 @@ router.get("/sensorData", (req, res) => {
       console.log("user.js 센서저장실패", err);
     }
   });
+
+  if (btnEmerg === "1" || falldown === "1") {
+    let accNote = btnEmerg==="1"? ("비상버튼 눌림"):("넘어짐 감지");
+
+      const sql3 = `insert into accidents (acc_info, acc_status, member_id)
+                    values (?, ?, ?)`;
+      conn.query(sql3, [accNote, "Y", member_id], (err, rows)=>{
+        if (rows) {
+          console.log("user.js 사고 저장 성공.");
+        } else {
+          console.log("user.js 사고저장 실패", err);
+        }
+      })
+  }
+
+              
   // 아두이노로 값 보내기.
 
   const sql2 = `select sleep_time, sleep_lightening from members where member_id=(?)`;
@@ -305,7 +321,6 @@ router.get("/sensorData", (req, res) => {
     }
   });
 
-  res.send("Data received successfully");
 });
 
 module.exports = router;

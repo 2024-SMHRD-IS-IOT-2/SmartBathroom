@@ -126,7 +126,7 @@ function HomePage() {
             >
               
               <h1>하승철</h1>
-              <h3>역할<br></br>프론트,백엔드</h3>
+              <h3>역할:<br></br>프론트,백엔드</h3>
             </div>
             <div
               style={{

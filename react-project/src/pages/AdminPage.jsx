@@ -95,12 +95,11 @@ const AdminPage = () => {
       <AlertComponent alertInfo={alertInfo}/>
       <h1 className={"admin-title"}>회원 목록</h1>
   
-      <div className={"admin-area-list"}>
+      <div className={"admin-area-list"} style={{ display: 'flex', flexWrap: 'wrap' }}>
         {users.map((user) => (
   
           <div key={user.member_id} onClick={() => openModal(user)}
-            className={"admin-list-item"}
-            style={{ backgroundColor: (accidentUserId.includes(user.member_id)) ? "lightcoral" : "lightgreen" }}>
+            className={"admin-list-item"} style={{ width: '20%', backgroundColor: (accidentUserId.includes(user.member_id)) ? "lightcoral" : "lightgreen" }}>
             <p>이름: {user.member_name}</p>
             <p>연락처: {user.member_phone}</p>
             <p>보호자 이름: {user.guardian_name}</p>
@@ -127,12 +126,13 @@ const AdminPage = () => {
   
             {/* 오른쪽 : 사고 이력 */}
             <AccList member_id={selectedUser.member_id}/>
-
+  
           </div>
         </div>
       )}
     </div>
   );
+  
   
 };
 

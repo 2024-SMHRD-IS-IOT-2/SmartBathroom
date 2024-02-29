@@ -32,7 +32,7 @@ const Charts = () => {
       }
     };
     fetchData();
-    const interval = setInterval(fetchData, 5000); // 5초마다 fetchData 함수 실행
+    const interval = setInterval(fetchData, 300000); // 5초마다 fetchData 함수 실행
     return () => clearInterval(interval);
   }, []);
 

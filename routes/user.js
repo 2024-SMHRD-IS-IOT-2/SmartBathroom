@@ -267,9 +267,6 @@ router.get("/sensorData", (req, res) => {
   const { humidity, temp, nh3, meth, btnEmerg, falldown, member_id } =
     req.query;
 
-  console.log("Received sensor data from Arduino:");
-  console.log(req.query);
-
   // 받은 아이디값으로 DB 저장
   const sql = `insert into sensors(sensor_humid, sensor_temp, sensor_nh3, member_id) 
                 values (?,?,?,?)`;
@@ -315,7 +312,7 @@ router.get("/sensorData", (req, res) => {
       else isSleepLight = false;
 
       //수면등 여부 // 수면등 밝기 아두이노로 전송.
-      res.send(`${isSleepLight}*${rows[0].sleep_lightening}*`);
+      res.send(`${isSleepLight ? 'T' : 'F'}${rows[0].sleep_lightening}`);
     } else {
       console.log("user.js 센서값 업데이트 실패", err);
     }

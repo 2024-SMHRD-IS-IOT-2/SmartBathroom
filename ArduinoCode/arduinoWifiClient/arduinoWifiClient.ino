@@ -27,8 +27,8 @@ const char* userId = "sensor";
 
 unsigned long prevMillis = 0;  // last time data sent
 const long interval = 10000;  // time interval in milliSecond
-bool isSleepLightOn = false; // LED sleeplight
-int sleepLightBright = 50; //LED 밝기 조절.
+bool isSleepLightOn = true; // LED sleeplight
+int sleepLightBright = 0; //LED 밝기 조절.
 float slope = -0.05;  // Negative slope to invert the relationship
 float intercept = 130;  // Adjusted intercept
 bool btnPressed = false;
@@ -192,21 +192,24 @@ void sendRequest(String url, String data) {
     }
 
     while (wifiClient.available()) {
-      String line = wifiClient.readStringUntil('*');
-      Serial.println(line);
-      if (line == "true") { // 수면등 on
+      String line = wifiClient.readStringUntil('\n');
+      line.trim();
+
+      char sleepOn = line.charAt(0);
+      int brightVal = line.substring(1).toInt();
+
+      Serial.println(String(sleepOn) + " : " + brightVal);
+
+      if (sleepOn == 'T') { // 수면등 on
         isSleepLightOn = true;
 
-      } else if ( line == "false") { // 수면등 off
+      } else if ( sleepOn == 'F') { // 수면등 off
         isSleepLightOn = false;
 
-      } else { // 수면등 밝기
-        Serial.print("수면등 밝기 ");
-        Serial.println(line);
-        if (line.toInt() != 0){
-          sleepLightBright = line.toInt();
-        }
-      }
+      } 
+      sleepLightBright = line.substring(1).toInt();
+
+
       Serial.print("결과 : ");
       Serial.print(isSleepLightOn);
       Serial.print("....");

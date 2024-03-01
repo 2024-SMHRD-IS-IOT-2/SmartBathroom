@@ -224,7 +224,7 @@ router.post("/checkAccidentForAlert", (req, res) => {
 //사고 정보 보내기
 router.post("/showAccident", (req, res) => {
   const { userId } = req.body;
-  const sql = `select * from accidents where member_id=?`;
+  const sql = `select * from accidents where member_id=? order by acc_time desc`;
   conn.query(sql, [userId], (err, rows) => {
     if (rows.length > 0) {
       res.json({ rows: rows, result: "success" });
@@ -267,9 +267,6 @@ router.get("/sensorData", (req, res) => {
   const { humidity, temp, nh3, meth, btnEmerg, falldown, member_id } =
     req.query;
 
-  console.log("Received sensor data from Arduino:");
-  console.log(req.query);
-
   // 받은 아이디값으로 DB 저장
   const sql = `insert into sensors(sensor_humid, sensor_temp, sensor_nh3, member_id) 
                 values (?,?,?,?)`;
@@ -280,6 +277,22 @@ router.get("/sensorData", (req, res) => {
       console.log("user.js 센서저장실패", err);
     }
   });
+
+  if (btnEmerg === "1" || falldown === "1") {
+    let accNote = btnEmerg==="1"? ("비상버튼 눌림"):("넘어짐 감지");
+
+      const sql3 = `insert into accidents (acc_info, acc_status, member_id)
+                    values (?, ?, ?)`;
+      conn.query(sql3, [accNote, "Y", member_id], (err, rows)=>{
+        if (rows) {
+          console.log("user.js 사고 저장 성공.");
+        } else {
+          console.log("user.js 사고저장 실패", err);
+        }
+      })
+  }
+
+              
   // 아두이노로 값 보내기.
 
   const sql2 = `select sleep_time, sleep_lightening from members where member_id=(?)`;
@@ -299,13 +312,12 @@ router.get("/sensorData", (req, res) => {
       else isSleepLight = false;
 
       //수면등 여부 // 수면등 밝기 아두이노로 전송.
-      res.send(`${isSleepLight}*${rows[0].sleep_lightening}*`);
+      res.send(`${isSleepLight ? 'T' : 'F'}${rows[0].sleep_lightening}`);
     } else {
       console.log("user.js 센서값 업데이트 실패", err);
     }
   });
 
-  res.send("Data received successfully");
 });
 
 module.exports = router;

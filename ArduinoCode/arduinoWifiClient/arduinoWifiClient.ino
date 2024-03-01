@@ -2,7 +2,7 @@
 #include "DHT.h"
 #include <MiCS6814-I2C.h>
 
-#define DHTPIN 18
+#define DHTPIN 23
 #define DHTTYPE DHT22
 #define METHPIN 34
 #define NH3 35
@@ -12,6 +12,8 @@
 #define SONARTRIG 16
 #define SONARECHO 17
 #define LEDPIN 12
+#define FANPIN 25
+#define FALLAPIN 34
 
 DHT dht(DHTPIN, DHTTYPE);
 WiFiClient wifiClient;
@@ -19,16 +21,19 @@ WiFiClient wifiClient;
 
 const char* ssid = "SMHRD_강의실C";
 const char* password = "ccccc33333";
-const char* serverAddress = "172.30.1.37"; // IP address of your Node.js server
+const char* serverAddress = "172.30.1.42"; // IP address of your Node.js server
 const int serverPort = 3001; // Port of your Node.js server
 const char* userId = "sensor";
 
 unsigned long prevMillis = 0;  // last time data sent
 const long interval = 10000;  // time interval in milliSecond
-bool isSleepLightOn = false; // LED sleeplight
-int sleepLightBright = 80; //LED 밝기 조절.
+bool isSleepLightOn = true; // LED sleeplight
+int sleepLightBright = 0; //LED 밝기 조절.
+float slope = -0.05;  // Negative slope to invert the relationship
+float intercept = 130;  // Adjusted intercept
 bool btnPressed = false;
 bool fallDetected = false;
+int fallDectecedVal = 0;
 int distance = 0;
 
 bool entered = false;  //초음파 출입감지
@@ -46,8 +51,10 @@ void setup() {
   pinMode(EMERGBTNPIN, INPUT);
   pinMode(SONARTRIG, OUTPUT);
   pinMode(SONARECHO, INPUT);
+  pinMode(FANPIN, OUTPUT);
   ledcSetup(0,5000,8);
   ledcAttachPin(LEDPIN,0);
+
 }
 
 void loop() {
@@ -70,6 +77,7 @@ void loop() {
     // falldown sensor
     bool fallsensor = digitalRead(FALLPIN);
     if (!fallsensor) {
+      fallDectecedVal = analogRead(FALLAPIN);
       fallDetected = true;
     }
     //led
@@ -89,11 +97,11 @@ void ledControl () {
   distance = duration / 29.1;
 
   //출입 알고리즘
-  if (check & (distance < 10)){
+  if (check & (distance < 11)){
     check = false;
     entered = !entered;
-    delay(100);
-  } else if (!check & distance >= 24){
+    delay(1000);
+  } else if (!check & distance >= 15){
     check = true;
   }
 
@@ -129,8 +137,10 @@ void sendDataToServer() {
 
   float h = dht.readHumidity();
   float t = dht.readTemperature();
-  int nh3 = analogRead(NH3);
+  float nh3 = analogRead(NH3);
+  nh3 = slope * nh3 + intercept;
   float meth = analogRead(METHPIN);
+  int fallAnalog = analogRead(FALLAPIN);
 
   String data = "member_id=" + String(userId) + 
                 "&humidity=" + String(h) + 
@@ -139,23 +149,32 @@ void sendDataToServer() {
                 "&meth=" + String(meth) +
                 "&btnEmerg=" + String(btnPressed) +
                 "&falldown=" + String(fallDetected);
-  // sendRequest(url, data);  
+  sendRequest(url, data);  
     Serial.println(data);
 
   // testing.
   // String testData = "humidity=" + String(h) + 
-  //               "  //  temp=" + String(t) +
-  //               "  //  nh3=" + String(nh3) +
-  //               "  //  meth=" + String(meth) +
-  //               "  //  distance=" + String(distance) +
-  //               "  //  btnEmerg=" + String(btnPressed) +
-  //               "  // falldown=" + String(fallDetected);
+  //               " // temp=" + String(t) +
+  //               " // nh3=" + String(nh3) +
+  //               " // meth=" + String(meth) +
+  //               " // distance=" + String(distance) +
+  //               " // btnEmerg=" + String(btnPressed) +
+  //               " // falldown=" + String(fallDetected) + 
+  //               " // fallAnalog=" + String(fallAnalog) +
+  //               " // falldownVal=" + String(fallDectecedVal);
   // Serial.println(testData);
 
+  // fan
+  if (meth > 1000 || nh3 > 40  || h > 50) {
+    digitalWrite(FANPIN, 1);
+  } else {
+    digitalWrite(FANPIN, 0);
+  }
 
   //reset the btn, falldown.
   btnPressed = false;
   fallDetected = false;
+  fallDectecedVal = 0;
 }
 
 //send get request to node server. with sensor data.
@@ -173,21 +192,24 @@ void sendRequest(String url, String data) {
     }
 
     while (wifiClient.available()) {
-      String line = wifiClient.readStringUntil('*');
-      Serial.println(line);
-      if (line == "true") { // 수면등 on
+      String line = wifiClient.readStringUntil('\n');
+      line.trim();
+
+      char sleepOn = line.charAt(0);
+      int brightVal = line.substring(1).toInt();
+
+      Serial.println(String(sleepOn) + " : " + brightVal);
+
+      if (sleepOn == 'T') { // 수면등 on
         isSleepLightOn = true;
 
-      } else if ( line == "false") { // 수면등 off
+      } else if ( sleepOn == 'F') { // 수면등 off
         isSleepLightOn = false;
 
-      } else { // 수면등 밝기
-        Serial.print("수면등 밝기 ");
-        Serial.println(line);
-        if (line.toInt() != 0){
-          sleepLightBright = line.toInt();
-        }
-      }
+      } 
+      sleepLightBright = line.substring(1).toInt();
+
+
       Serial.print("결과 : ");
       Serial.print(isSleepLightOn);
       Serial.print("....");

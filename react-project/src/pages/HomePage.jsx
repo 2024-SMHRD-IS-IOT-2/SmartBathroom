@@ -54,7 +54,8 @@ function HomePage() {
             >
               
               <h1>김성재(팀장)</h1>
-              <h3>역할:<br></br>PM,Arduino</h3>
+              <h3>역할</h3>
+              <h4>PM, 하드웨어</h4>
             </div>
             <div
               style={{
@@ -69,7 +70,8 @@ function HomePage() {
             >
             
               <h1>최교인</h1>
-              <h3>역할:<br></br>DB,백엔드</h3>
+              <h3>역할</h3>
+              <h4>DB, BackEnd</h4>
             </div>
             <div
               style={{
@@ -84,7 +86,9 @@ function HomePage() {
             >
               
               <h1>하승철</h1>
-              <h3>역할:<br></br>프론트,백엔드</h3>
+              <h3>역할</h3>
+              <h4>FrontEnd, BackEnd</h4>
+
             </div>
             <div
               style={{
@@ -97,7 +101,9 @@ function HomePage() {
             >
              
               <h1>임용묵</h1>
-              <h3>역할:<br></br>프론트,백엔드</h3>
+              <h3>역할</h3>
+              <h4>FrontEnd, BackEnd</h4>
+
             </div>
           </div>
         </div>
@@ -105,7 +111,8 @@ function HomePage() {
 
       <div style={{ width: "30%", paddingLeft: "30px", fontSize: "16px", lineHeight: "1.6" }}>
   <div style={{ marginBottom: "20px" }}>
-    <h1 style={{ fontSize: "24px", marginBottom: "10px" }}>제품 소개 및 기능</h1>
+    <h1 style={{ fontSize: "24px", marginBottom: "10px" }}>스마트화장실 올인원 케어</h1>
+    <h1 style={{ fontSize: "20px", marginBottom: "10px" }}>제품 소개 및 기능</h1>
     <ul style={{ listStyleType: 'none', padding: 0 }}>
       <li style={{ marginBottom: '20px' }}>
         <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>환풍기</h2>

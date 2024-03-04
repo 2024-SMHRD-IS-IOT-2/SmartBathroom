@@ -2,7 +2,7 @@ import React from "react";
 import img from "../media/siot.png"; // 이미지를 임포트합니다.
 
 function HomePage() {
-  const youtubeVideoId = "4KaABeCAWEE"; // 유튜브 영상 ID를 입력하세요.
+  const youtubeVideoId = "DPyUm6GtsNU"; // 유튜브 영상 ID를 입력하세요.
 
   return (
     <div

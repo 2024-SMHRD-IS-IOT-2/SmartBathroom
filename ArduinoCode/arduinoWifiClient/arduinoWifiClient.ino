@@ -26,7 +26,7 @@ const int serverPort = 3001; // Port of your Node.js server
 const char* userId = "sensor";
 
 unsigned long prevMillis = 0;  // last time data sent
-const long interval = 10000;  // time interval in milliSecond
+const long interval = 5000;  // time interval in milliSecond
 bool isSleepLightOn = true; // LED sleeplight
 int sleepLightBright = 0; //LED 밝기 조절.
 float slope = -0.05;  // Negative slope to invert the relationship
